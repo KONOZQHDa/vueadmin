@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vueadminjava2.dao.SysRoleDao">
+
+    <resultMap type="com.example.vueadminjava2.entity.SysRole" id="SysRoleMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="updated" column="updated" jdbcType="TIMESTAMP"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysRoleMap">
+        select id,
+               name,
+               code,
+               remark,
+               created,
+               updated,
+               state
+        from vueadmin.sys_role
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SysRoleMap">
+        select id,
+               name,
+               code,
+               remark,
+               created,
+               updated,
+               state
+        from vueadmin.sys_role limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysRoleMap">
+        select
+        id, name, code, remark, created, updated, state
+        from vueadmin.sys_role
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="code != null and code != ''">
+                and code = #{code}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="created != null">
+                and created = #{created}
+            </if>
+            <if test="updated != null">
+                and updated = #{updated}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into vueadmin.sys_role(name, code, remark, created, updated, state)
+        values (#{name}, #{code}, #{remark}, #{created}, #{updated}, #{state})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vueadmin.sys_role(name, code, remark, created, updated, state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.code}, #{entity.remark}, #{entity.created}, #{entity.updated}, #{entity.state})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vueadmin.sys_role(name, code, remark, created, updated, state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.code}, #{entity.remark}, #{entity.created}, #{entity.updated}, #{entity.state})
+        </foreach>
+        on duplicate key update
+        name = values(name) , code = values(code) , remark = values(remark) , created = values(created) , updated =
+        values(updated) , state = values(state)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update vueadmin.sys_role
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="code != null and code != ''">
+                code = #{code},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="created != null">
+                created = #{created},
+            </if>
+            <if test="updated != null">
+                updated = #{updated},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from vueadmin.sys_role
+        where id = #{id}
+    </delete>
+
+    <!--    通过userid查找用户所拥有的角色的名称集合-->
+    <select id="getRolesNameByUserId" resultType="string">
+        SELECT r.`name`
+        FROM sys_user_role as ur
+                 JOIN sys_role AS r ON ur.role_id = r.id
+        WHERE ur.user_id = #{id}
+    </select>
+
+    <select id="getRoles" resultType="sysRole">
+        SELECT * from vueadmin.sys_role
+    </select>
+</mapper>
+

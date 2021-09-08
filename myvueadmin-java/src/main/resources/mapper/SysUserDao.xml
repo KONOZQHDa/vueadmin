@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vueadminjava2.dao.SysUserDao">
+
+    <resultMap type="com.example.vueadminjava2.entity.SysUser" id="SysUserMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="city" column="city" jdbcType="VARCHAR"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="updated" column="updated" jdbcType="TIMESTAMP"/>
+        <result property="lastLogin" column="last_login" jdbcType="TIMESTAMP"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysUserMap">
+        select id,
+               username,
+               password,
+               avatar,
+               email,
+               city,
+               created,
+               updated,
+               last_login,
+               state
+        from vueadmin.sys_user
+        where id = #{id}
+    </select>
+    <!--    根据用户名查询单个-->
+    <select id="queryByUserNameAndPassword" resultMap="SysUserMap">
+        select id,
+               username,
+               password,
+               avatar,
+               email,
+               city,
+               created,
+               updated,
+               last_login,
+               state
+        from vueadmin.sys_user
+        where username = #{username}
+          and password = #{password}
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SysUserMap">
+        select id,
+               username,
+               password,
+               avatar,
+               email,
+               city,
+               created,
+               updated,
+               last_login,
+               state
+        from vueadmin.sys_user limit #{offset}, #{limit}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysUserMap">
+        select
+        id, username, password, avatar, email, city, created, updated, last_login, state
+        from vueadmin.sys_user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="avatar != null and avatar != ''">
+                and avatar = #{avatar}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="city != null and city != ''">
+                and city = #{city}
+            </if>
+            <if test="created != null">
+                and created = #{created}
+            </if>
+            <if test="updated != null">
+                and updated = #{updated}
+            </if>
+            <if test="lastLogin != null">
+                and last_login = #{lastLogin}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into vueadmin.sys_user(username, avatar, email, city, created, updated, last_login, state)
+        values (#{username}, #{avatar}, #{email}, #{city}, #{created}, #{updated}, #{lastLogin}, #{state})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vueadmin.sys_user(username, password, avatar, email, city, created, updated, last_login, state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.username}, #{entity.password}, #{entity.avatar}, #{entity.email}, #{entity.city},
+            #{entity.created}, #{entity.updated}, #{entity.lastLogin}, #{entity.state})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vueadmin.sys_user(username, password, avatar, email, city, created, updated, last_login, state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.username}, #{entity.password}, #{entity.avatar}, #{entity.email}, #{entity.city},
+            #{entity.created}, #{entity.updated}, #{entity.lastLogin}, #{entity.state})
+        </foreach>
+        on duplicate key update
+        username = values(username) , password = values(password) , avatar = values(avatar) , email = values(email) ,
+        city = values(city) , created = values(created) , updated = values(updated) , last_login = values(last_login) ,
+        state = values(state)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update vueadmin.sys_user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="avatar != null and avatar != ''">
+                avatar = #{avatar},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="city != null and city != ''">
+                city = #{city},
+            </if>
+            <if test="created != null">
+                created = #{created},
+            </if>
+            <if test="updated != null">
+                updated = #{updated},
+            </if>
+            <if test="lastLogin != null">
+                last_login = #{lastLogin},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from vueadmin.sys_user
+        where id = #{id}
+    </delete>
+
+
+    <!--    通过主键获取用户所拥有权限-->
+    <select id="getAuthoritiesById" resultType="string">
+        SELECT m.perms
+        FROM (SELECT role_id FROM sys_user_role WHERE user_id = #{id}) AS roles
+                 JOIN sys_role_menu AS rm ON roles.role_id = rm.role_id
+                 JOIN sys_menu AS m ON m.id = rm.menu_id
+    </select>
+
+<!--    查询所有用户-->
+    <select id="queryAllUsers" resultMap="SysUserMap">
+        select * from vueadmin.sys_user
+    </select>
+
+<!--    查询所有用户的总数量-->
+    <select id="getTotalCount" resultType="integer">
+        select count(*) from vueadmin.sys_user
+    </select>
+
+<!--    通过用户名模糊查询用户-->
+    <select id="fuzzyQueryByUserName" resultType="sysUser">
+        select * from vueadmin.sys_user where username  like CONCAT('%',#{keyword},'%')
+    </select>
+</mapper>
+
