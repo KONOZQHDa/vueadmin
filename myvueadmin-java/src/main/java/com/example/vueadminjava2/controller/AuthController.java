@@ -1,6 +1,5 @@
 package com.example.vueadminjava2.controller;
 
-import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.example.vueadminjava2.commen.captcha.Captcha;
@@ -60,7 +59,7 @@ public class AuthController{
         String captchaImg = str + encoder.encode(outputStream.toByteArray());
 
         //保存验证码信息用于登录时对比认证
-        CaptchaStore.saveCaptcha(key,code);
+        CaptchaStore.saveCaptcha(key, code);
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("captchaKey", key);
@@ -70,13 +69,13 @@ public class AuthController{
     }
 
     @PostMapping("/login")
-    public Result login(@RequestBody SysUser user,Captcha captcha) {
+    public Result login(@RequestBody SysUser user, Captcha captcha) {
         //判断验证码是否正确
-        if(CaptchaStore.verifyCaptcha(captcha.getCaptchaKey(),captcha.getCaptcha())){
+        if (CaptchaStore.verifyCaptcha(captcha.getCaptchaKey(), captcha.getCaptcha())) {
             //当前验证码作废
             CaptchaStore.disableCaptcha(captcha.getCaptchaKey());
             //判断用户名和密码是否合法,认证
-            SysUser sysUser = userServiceImpl.queryByUserNameAndPassword(user.getUsername(),user.getPassword());
+            SysUser sysUser = userServiceImpl.queryByUserNameAndPassword(user.getUsername(), user.getPassword());
             if (sysUser != null) {
                 //通过satoken设置为已登录，并生成得到对应的tokeninfo对象
                 StpUtil.login(sysUser.getId());
@@ -85,23 +84,26 @@ public class AuthController{
                 HashMap<String, String> tokenMap = new HashMap<>();
                 tokenMap.put("tokenName", tokenInfo.getTokenName());
                 tokenMap.put("tokenValue", tokenInfo.getTokenValue());
-                System.out.println(tokenInfo.getTokenName());
-                System.out.println(tokenInfo.getTokenValue());
                 //将token作为data返回给前端，前端要将其保存起来，然后每次请求时将其添加到请求头中带上
                 return Result.success(tokenMap);
             }
             return Result.fail(400, "用户名或密码错误", null);
-        }else {
+        }
+        else {
             CaptchaStore.disableCaptcha(captcha.getCaptchaKey());
-            return Result.fail(400,"验证码错误",null);
+            return Result.fail(400, "验证码错误", null);
         }
     }
 
-
-    @SaCheckLogin
     @GetMapping("/logout")
     public Result logout(){
         StpUtil.logout();
         return Result.success("登出成功");
     }
+
+    @GetMapping("test")
+    public Result<String> test(){
+        return Result.success("test success");
+    }
+
 }

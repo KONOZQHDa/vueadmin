@@ -4,7 +4,7 @@ import router from "../router/index"
 export default function getrequest(config) {
 	const request = axios.create({
 		timeout: 5000,
-		baseURL: "http://localhost:8080/",
+		baseURL: 'http://localhost:8080',
 		headers: {'Content-Type': "application/json;charset=utf-8"}
 	})
 	//sa-token认证信息

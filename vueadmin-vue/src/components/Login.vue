@@ -38,8 +38,6 @@
 
 <script>
 import AxiosInstance from "../network/request"
-import Mock from "mockjs"
-import element from "element-ui";
 export default {
     name: "Login",
     data() {
