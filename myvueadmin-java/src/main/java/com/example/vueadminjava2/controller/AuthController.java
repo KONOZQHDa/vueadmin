@@ -98,7 +98,7 @@ public class AuthController{
     @GetMapping("/logout")
     public Result logout(){
         StpUtil.logout();
-        return Result.success("登出成功");
+        return Result.success(null);
     }
 
     @GetMapping("test")
