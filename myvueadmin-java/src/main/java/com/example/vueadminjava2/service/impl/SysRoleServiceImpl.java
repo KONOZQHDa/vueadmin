@@ -85,8 +85,8 @@ public class SysRoleServiceImpl implements SysRoleService{
      * @return 角色集合
      */
     @Override
-    public List<String> getRolesNameByUserId(Object userId) {
-        return sysRoleDao.getRolesNameByUserId(userId);
+    public List<SysRole> getRolesByUserId(Object userId) {
+        return sysRoleDao.getRolesByUserId(userId);
     }
 
     @Override

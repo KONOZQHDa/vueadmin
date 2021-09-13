@@ -53,4 +53,12 @@ public interface SysUserRoleService{
      */
     boolean deleteById(Long id);
 
+    /**
+     * 删除用户所拥有的某个角色
+     * @param userId
+     * @param roleId
+     * @return
+     */
+    int deleteByUserIdAndRoleId(Long userId,Long roleId);
+
 }

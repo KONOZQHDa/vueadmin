@@ -97,12 +97,13 @@
         </where>
     </select>
 
+    <select id="queryAllMenus" resultType="sysMenu">
+        select * from vueadmin.sys_menu
+    </select>
     <!--新增所有列-->
-    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into vueadmin.sys_menu(parent_id, name, path, perms, component, type, icon, orderNum, created, updated,
-                                      state)
-        values (#{parentId}, #{name}, #{path}, #{perms}, #{component}, #{type}, #{icon}, #{ordernum}, #{created},
-                #{updated}, #{state})
+    <insert id="insertByMybatis" keyProperty="id" useGeneratedKeys="true">
+        insert into vueadmin.sys_menu(parent_id, name, path, perms, component, type, icon, orderNum,state)
+        values (#{parentId}, #{name}, #{path}, #{perms}, #{component}, #{type}, #{icon}, #{ordernum},#{state})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
@@ -160,9 +161,7 @@
             <if test="created != null">
                 created = #{created},
             </if>
-            <if test="updated != null">
-                updated = #{updated},
-            </if>
+
             <if test="state != null">
                 state = #{state},
             </if>

@@ -79,5 +79,13 @@ public interface SysUserRoleDao{
      */
     int deleteById(Long id);
 
+    /**
+     * 删除用户所拥有的某个角色
+     * @param usreId
+     * @param roleId
+     * @return
+     */
+    int deleteByUserIdAndRoleId(@Param("userId") Long usreId,@Param("roleId") Long roleId);
+
 }
 

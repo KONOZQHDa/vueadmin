@@ -78,90 +78,90 @@ Mock.mock('http://localhost:8080/sys/menuList', 'get', () => {
 	return Result
 })
 
-Mock.mock('http://localhost:8080/getMenusTableData', 'get', () => {
-	Result.data = {
-		tableData: [
-			{
-				id: 1,
-				name: '系统管理',
-				state: 1,
-				type: 0,
-				permit:'sys:management',
-				children: [
-					{
-						id: 11,
-						name: '用户管理',
-						state: 1,
-						type: 1,
-						url:'sys/users',
-						component:'system/user.vue',
-						children:[
-							{
-								id: 111,
-								name: '添加用户',
-								state: 1,
-								type: 2
-							}
-						]
-					},
-					{
-						id: 12,
-						name: '角色管理',
-						state: 1,
-						type: 1,
-						url:'sys/roles',
-						component:'system/role.vue',
-					},
-					{
-						id: 13,
-						name: '菜单管理',
-						state: 1,
-						type: 1,
-						url:'sys/menus',
-						component:'system/menu.vue',
-					}
-				]
-			},
-			{
-				id: 2,
-				name: '系统工具',
-				state: 0,
-				type: 0,
-				children: [
-					{
-						id: 21,
-						name: '数字字典',
-						state: 0,
-						type: 1
-					}
-				]
-			}
-		],
-		idsArray: [1,11,111,2]
+// Mock.mock('http://localhost:8080/getMenusTableData', 'get', () => {
+// 	Result.data = {
+// 		tableData: [
+// 			{
+// 				id: 1,
+// 				name: '系统管理',
+// 				state: 1,
+// 				type: 0,
+// 				permit:'sys:management',
+// 				children: [
+// 					{
+// 						id: 11,
+// 						name: '用户管理',
+// 						state: 1,
+// 						type: 1,
+// 						url:'sys/users',
+// 						component:'system/user.vue',
+// 						children:[
+// 							{
+// 								id: 111,
+// 								name: '添加用户',
+// 								state: 1,
+// 								type: 2
+// 							}
+// 						]
+// 					},
+// 					{
+// 						id: 12,
+// 						name: '角色管理',
+// 						state: 1,
+// 						type: 1,
+// 						url:'sys/roles',
+// 						component:'system/role.vue',
+// 					},
+// 					{
+// 						id: 13,
+// 						name: '菜单管理',
+// 						state: 1,
+// 						type: 1,
+// 						url:'sys/menus',
+// 						component:'system/menu.vue',
+// 					}
+// 				]
+// 			},
+// 			{
+// 				id: 2,
+// 				name: '系统工具',
+// 				state: 0,
+// 				type: 0,
+// 				children: [
+// 					{
+// 						id: 21,
+// 						name: '数字字典',
+// 						state: 0,
+// 						type: 1
+// 					}
+// 				]
+// 			}
+// 		],
+// 		idsArray: [1,11,111,2]
+//
+// 	}
+// 	return Result
+// })
 
-	}
-	return Result
-})
-
-Mock.mock('http://localhost:8080/getRolesTableData', 'get', () => {
-	Result.data = {
-		tableData: [
-			{
-				roleName: '普通用户',
-				roleCode: 'normal',
-				description: '',
-				state: 1,
-			}, {
-				roleName: '超级管理员',
-				roleCode: 'admin',
-				description: '',
-				state: 1,
-			}
-		],
-		total: 2
-	}
-	return Result
-})
+// Mock.mock('http://localhost:8080/getRolesTableData', 'get', () => {
+// 	Result.data = {
+// 		tableData: [
+// 			{
+// 				roleName: '普通用户',
+// 				roleCode: 'normal',
+// 				description: '',
+// 				state: 1,
+// 			}, {
+// 				roleName: '超级管理员',
+// 				roleCode: 'admin',
+// 				description: '',
+// 				state: 1,
+// 			}
+// 		],
+// 		total: 2
+// 	}
+// 	return Result
+// })
 // Mock.mock('http://localhost:8080/getUsersTableData', 'get', () => {
 // 	Result.data = {
 // 		tableData: [

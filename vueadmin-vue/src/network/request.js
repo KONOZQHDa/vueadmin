@@ -19,16 +19,14 @@ export default function getrequest(config) {
 					return response
 				}
 				//code=401说明未登录
-				else if (response.data.code == 401){
-					/*//因为import router from "../router/index"导致的bug未解决、
-					// 所以跳转到登录页面的功能暂时按下面实现
-					window.location.href="http://localhost:8080/#/login";*/
+				else if (response.data.code == 401) {
 					router.push("/login").then()
 					return Promise.reject(response.data.message)
 				} else {
 					return Promise.reject(response.data.message)
 				}
 			}, error => {
+				console.log("reject");
 				return Promise.reject(error.message)
 			})
 

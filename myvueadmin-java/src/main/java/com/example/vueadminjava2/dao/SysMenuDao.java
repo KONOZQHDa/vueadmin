@@ -1,5 +1,6 @@
 package com.example.vueadminjava2.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.vueadminjava2.entity.SysMenu;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @author KONO 曾淇杭哒！
  * @since 2021-08-29 15:01:04
  */
-public interface SysMenuDao{
+public interface SysMenuDao extends BaseMapper<SysMenu>{
 
     /**
      * 通过ID查询单条数据
@@ -45,7 +46,7 @@ public interface SysMenuDao{
      * @param sysMenu 实例对象
      * @return 影响行数
      */
-    int insert(SysMenu sysMenu);
+    int insertByMybatis(SysMenu sysMenu);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
@@ -78,6 +79,8 @@ public interface SysMenuDao{
      * @return 影响行数
      */
     int deleteById(Long id);
+
+    List<SysMenu> queryAllMenus();
 
 }
 

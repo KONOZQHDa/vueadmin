@@ -76,4 +76,9 @@ public class SysUserRoleServiceImpl implements SysUserRoleService{
     public boolean deleteById(Long id) {
         return this.sysUserRoleDao.deleteById(id) > 0;
     }
+
+    @Override
+    public int deleteByUserIdAndRoleId(Long userId, Long roleId) {
+        return sysUserRoleDao.deleteByUserIdAndRoleId(userId, roleId);
+    }
 }

@@ -102,7 +102,8 @@ public class AuthController{
     }
 
     @GetMapping("test")
-    public Result<String> test(){
+    public Result<String> test(@RequestParam("null") String k){
+        System.out.println(k);
         return Result.success("test success");
     }
 

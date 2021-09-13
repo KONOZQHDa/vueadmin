@@ -53,4 +53,10 @@ public interface SysMenuService{
      */
     boolean deleteById(Long id);
 
+    List<SysMenu> queryAllMenus();
+
+    List<SysMenu> treeMenus(List<SysMenu> menus);
+
+
+
 }

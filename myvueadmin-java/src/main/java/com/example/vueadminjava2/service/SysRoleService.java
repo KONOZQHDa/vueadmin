@@ -60,7 +60,7 @@ public interface SysRoleService{
      * @param userId user表主键
      * @return 角色集合
      */
-    List<String> getRolesNameByUserId(Object userId);
+    List<SysRole> getRolesByUserId(Object userId);
 
     List<SysRole> getRoles();
 

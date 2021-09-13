@@ -6,7 +6,9 @@ import com.example.vueadminjava2.service.SysMenuService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * (SysMenu)表服务实现类
@@ -62,7 +64,7 @@ public class SysMenuServiceImpl implements SysMenuService{
      */
     @Override
     public SysMenu update(SysMenu sysMenu) {
-        this.sysMenuDao.update(sysMenu);
+        sysMenuDao.updateById(sysMenu);
         return this.queryById(sysMenu.getId());
     }
 
@@ -75,5 +77,28 @@ public class SysMenuServiceImpl implements SysMenuService{
     @Override
     public boolean deleteById(Long id) {
         return this.sysMenuDao.deleteById(id) > 0;
+    }
+
+
+    @Override
+    public List<SysMenu> queryAllMenus() {
+        return sysMenuDao.queryAllMenus();
+    }
+
+    @Override
+    public List<SysMenu> treeMenus(List<SysMenu> menus) {
+        List<SysMenu> finalMenu = new ArrayList<>();
+        for (SysMenu menu : menus) {
+            for (SysMenu childMenu : menus) {
+                if (childMenu.getParentId().equals(menu.getId())) {
+                    menu.getChildren().add(childMenu);
+                }
+            }
+
+            if (menu.getParentId() == 0L) {
+                finalMenu.add(menu);
+            }
+        }
+        return finalMenu;
     }
 }

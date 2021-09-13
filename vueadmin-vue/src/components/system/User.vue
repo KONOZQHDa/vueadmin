@@ -174,11 +174,10 @@
                 :props = "{label:'name'}"
                 ref="roleTree"
                 >
-
             </el-tree>
-                    <el-button type="primary" @click="assignRoles">确 定</el-button>
+                    <el-button type="primary" @click="assignRoles" size="mini">分 配</el-button>
+                    <el-button type="danger" @click="removeRoles" size="mini">删 除</el-button>
         </el-dialog>
-
 
     </div>
 </template>
@@ -315,7 +314,7 @@ export default {
                 methods: 'get',
                 url: 'http://localhost:8081/sysRole/getRoles',
             }).then(resp => {
-                this.roles = resp.data.data.roles
+                this.roles = resp.data.data
             }, error => {
                 this.$message.error(error)
             })
@@ -325,6 +324,25 @@ export default {
             request({
                 methods: 'get',
                 url: 'http://localhost:8081/sysUser/assignRole',
+                params: {
+                    userId: this.userIdToAssignRole,
+                    rolesId: this.$refs.roleTree.getCheckedKeys()
+                },
+                paramsSerializer: params => {
+                    return qs.stringify(params, {indices: false})
+                }
+            }).then(resp => {
+                this.$message.success(resp.data.message)
+                this.getUsers()
+            }, error => {
+                this.$message.error(error)
+            })
+            this.rolesDialogVisible = false
+        },
+        removeRoles(){
+            request({
+                methods: 'get',
+                url: 'http://localhost:8081/sysUser/removeRole',
                 params: {
                     userId: this.userIdToAssignRole,
                     rolesId: this.$refs.roleTree.getCheckedKeys()

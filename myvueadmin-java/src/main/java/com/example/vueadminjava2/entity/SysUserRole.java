@@ -3,6 +3,7 @@ package com.example.vueadminjava2.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 

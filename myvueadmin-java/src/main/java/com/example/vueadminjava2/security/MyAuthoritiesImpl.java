@@ -1,6 +1,7 @@
 package com.example.vueadminjava2.security;
 
 import cn.dev33.satoken.stp.StpInterface;
+import com.example.vueadminjava2.entity.SysRole;
 import com.example.vueadminjava2.service.impl.SysRoleServiceImpl;
 import com.example.vueadminjava2.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Description :完成sa-token的权限管理
@@ -31,6 +33,7 @@ public class MyAuthoritiesImpl implements StpInterface{
 
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
-        return sysRoleService.getRolesNameByUserId(loginId);
+        List<SysRole> roles = sysRoleService.getRolesByUserId(loginId);
+        return roles.stream().map(role -> role.getName()).collect(Collectors.toList());
     }
 }

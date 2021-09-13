@@ -1,10 +1,13 @@
 package com.example.vueadminjava2.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.example.vueadminjava2.commen.result.Result;
 import com.example.vueadminjava2.entity.SysMenu;
 import com.example.vueadminjava2.service.SysMenuService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (SysMenu)表控制层
@@ -21,15 +24,33 @@ public class SysMenuController{
     @Resource
     private SysMenuService sysMenuService;
 
-    /**
-     * 通过主键查询单条数据
-     *
-     * @param id 主键
-     * @return 单条数据
-     */
-    @GetMapping("selectOne")
-    public SysMenu selectOne(Long id) {
-        return this.sysMenuService.queryById(id);
+    @GetMapping("list")
+    public Result list(){
+        List<SysMenu> sysMenus = sysMenuService.queryAllMenus();
+        List<SysMenu> treeMenus = sysMenuService.treeMenus(sysMenus);
+        return Result.success(treeMenus);
+    }
+
+    @SaCheckPermission("sys:menu:update")
+    @GetMapping("updateMenu")
+    public Result update(SysMenu menu){
+        System.out.println(menu);
+        sysMenuService.update(menu);
+        return Result.success(200,"更新用户成功！",null);
+    }
+
+    @SaCheckPermission("sys:menu:save")
+    @GetMapping("addMenu")
+    public Result addMenu(SysMenu menu){
+        sysMenuService.insert(menu);
+        return Result.success(200,"新增用户成功！",null);
+    }
+
+    @SaCheckPermission("sys:menu:delete")
+    @GetMapping("deleteMenu")
+    public Result deleteMenu(@RequestParam("id") Long id){
+        sysMenuService.deleteById(id);
+        return Result.success(200,"删除成功",null);
     }
 
 }

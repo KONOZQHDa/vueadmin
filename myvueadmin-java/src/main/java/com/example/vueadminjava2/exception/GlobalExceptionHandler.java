@@ -18,14 +18,15 @@ public class GlobalExceptionHandler{
     @ExceptionHandler(value = RuntimeException.class)
     @ResponseBody
     public Result handler(RuntimeException e){
-        log.error("运行时异常：----------------{}", e);
+        System.out.println("运行时异常" + e);
         return Result.fail(400,e.getMessage(),null);
     }
 
     @ExceptionHandler(value = IllegalArgumentException.class)
     @ResponseBody
     public Result handler(IllegalArgumentException e) {
-        log.error("Assert异常：----------------{}", e.getMessage());
+//        log.error("Assert异常：----------------{}", e.getMessage());
+        System.out.println("IllegalArgumentException" + e);
         return Result.fail(e.getMessage());
     }
 

@@ -16,7 +16,7 @@ export default {
         tryTest(){
             request({
                 methods: 'get',
-                url: 'http://localhost:8081/test'
+                url: 'http://localhost:8081/test?null='
             }).then(response =>{
                 this.$message.success(response.data.message)
             })

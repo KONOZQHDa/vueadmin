@@ -85,7 +85,7 @@ public interface SysRoleDao{
      * @param userId user表主键
      * @return 角色的name集合
      */
-    List<String> getRolesNameByUserId(Object userId);
+    List<SysRole> getRolesByUserId(Object userId);
 
 //    查询所有角色
     List<SysRole> getRoles();

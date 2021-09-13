@@ -126,15 +126,19 @@
     </delete>
 
     <!--    通过userid查找用户所拥有的角色的名称集合-->
-    <select id="getRolesNameByUserId" resultType="string">
-        SELECT r.`name`
-        FROM sys_user_role as ur
-                 JOIN sys_role AS r ON ur.role_id = r.id
-        WHERE ur.user_id = #{id}
+    <select id="getRolesByUserId" resultType="sysRole">
+        SELECT *
+        FROM sys_role
+        WHERE id IN (
+            SELECT role_id
+            FROM sys_user_role AS ur
+                     JOIN sys_role AS r ON ur.role_id = r.id
+            WHERE ur.user_id = #{userId})
     </select>
 
     <select id="getRoles" resultType="sysRole">
-        SELECT * from vueadmin.sys_role
+        SELECT *
+        from vueadmin.sys_role
     </select>
 </mapper>
 

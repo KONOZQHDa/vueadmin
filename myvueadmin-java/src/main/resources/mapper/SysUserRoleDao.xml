@@ -88,6 +88,17 @@
         where id = #{id}
     </delete>
 
+    <delete id="deleteByUserIdAndRoleId">
+        delete from vueadmin.sys_user_role
+            <where>
+                <if test="userId != null">
+                    user_id = #{userId}
+                </if>
+                <if test="roleId != null">
+                   and role_id = #{roleId}
+                </if>
+            </where>
+    </delete>
 
 </mapper>
 
