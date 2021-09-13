@@ -1,7 +1,7 @@
 <template>
     <div>
 <!--        新增按钮，用这种行内表单中自带的按钮是因为使用它就不用自己再去调按钮的样式和间距之类了，本身独占一行-->
-        <el-form :inline="true" class="demo-form-inline">
+        <el-form :inline="true" class="demo-form-inline" v-if="hasAuthorization('sys:menu:save')">
             <el-form-item>
                 <el-button type="primary" @click="dialogVisible = true">新增</el-button>
             </el-form-item>
@@ -81,14 +81,16 @@
                 align="center"
                 label="操作">
                 <template slot-scope="scope">
-                    <el-button type="text" @click="editMenuHandle(scope.row.id)">编辑</el-button>
+                    <el-button type="text" @click="editMenuHandle(scope.row.id)"
+                               v-if="hasAuthorization('sys:menu:update')">编辑</el-button>
                     <el-divider direction="vertical"></el-divider>
                     <template>
                         <el-popconfirm
                             title="确人删除吗？"
                             @confirm="deleteMenu(scope.row.id)"
                         >
-                            <el-button type="text" slot="reference">删除</el-button>
+                            <el-button type="text" slot="reference"
+                            v-if="hasAuthorization('sys:menu:delete')">删除</el-button>
                         </el-popconfirm>
                     </template>
                 </template>
@@ -173,21 +175,56 @@ export default {
                     { required: true, message: '请输入菜单名称', trigger: 'blur' },
                     { min: 1, max: 8, message: '长度在 1 到 8 个字符', trigger: 'blur' }
                 ],
-                permit: [
-                    { required: true, message: '请选择权限编码', trigger: 'change' }
-                ],
-                url: [
-                    { required: true, message: '请输入菜单URL', trigger: 'blur' },
-                ],
-                component: [
-                    { required: true, message: '请输入菜单组件', trigger: 'blur' },
-                ],
                 type: [
                     { required: true, message: '请选择菜单类型', trigger: 'change' }
                 ],
                 state: [
                     { required: true, message: '请选择菜单状态', trigger: 'change' }
-                ]
+                ],
+                path: [],
+                component: [],
+                perms: []
+            }
+
+        }
+    },
+    watch:{
+        //新增或编辑菜单时，根据所选的类型不同，则表单中对应的必填项不同，对应修改表单rules
+        'editForm.type': {
+            handler(newValue,oldValue){
+                if (newValue == 0 || newValue == '') {
+                    if (oldValue == 1) {
+                         this.rules.path = []
+                         this.rules.component = []
+                    }else if (oldValue == 2){
+                         this.rules.perms = []
+                    }
+                }else if (newValue == 1){
+                    //如果原来选的是按钮，那么将验证规则中的权限编码项去掉
+                    if (oldValue == 2){
+                         this.rules.perms = []
+                    }
+
+                    //新增的是菜单，则url和组件必填
+                    this.rules.path =  [
+                        { required: true, message: '请输入菜单URL', trigger: 'blur' },
+                    ]
+
+                    this.rules.component = [
+                        { required: true, message: '请输入菜单组件', trigger: 'blur' },
+                    ]
+                    //新增的是按钮，则权限编码必填
+                }else if (newValue == 2){
+                    if (oldValue == 1){
+                         this.rules.path = []
+                         this.rules.component = []
+                    }
+
+
+                    this.rules.perms = [
+                        { required: true, message: '请选择权限编码', trigger: 'blur' }
+                    ]
+                }
             }
         }
     },
@@ -210,6 +247,9 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
             this.editForm = {}
+            this.rules.path = []
+            this.rules.component = []
+            this.rules.perms = []
         },
         getTableData(){
             this.$axios.get('http://localhost:8081/sysMenu/list').then(Response =>{
@@ -251,16 +291,7 @@ export default {
         },
         //完成菜单修改
         editMenu(){
-            /*request({
-                methods: 'get',
-                url: 'http://localhost:8081/sysMenu/updateMenu',
-                params: this.editForm
-            }).then(resp => {
-                this.$message.success(resp.data.message)
-                this.getTableData()
-            }, error => {
-                this.$message.error(error)
-            })*/
+
 
             request({
                 methods: 'get',

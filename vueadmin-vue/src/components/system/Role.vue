@@ -11,7 +11,8 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click="dialogVisible = true">新增</el-button>
+                <el-button type="primary" @click="dialogVisible = true"
+                v-if="hasAuthorization('sys:role:save')">新增</el-button>
             </el-form-item>
             <el-form-item>
                 <el-popconfirm
@@ -71,17 +72,20 @@
                 width="260px"
                 label="操作">
                 <template slot-scope="scope">
-                    <el-button type="text" @click="assignPermissions(scope.row.roleCode)">分配权限</el-button>
+                    <el-button type="text" @click="assignPermissions(scope.row.roleCode)"
+                    v-if="hasAuthorization('sys:role:perm')">分配权限</el-button>
                     <el-divider direction="vertical"></el-divider>
 
-                    <el-button type="text" @click="editRole(scope.row.roleCode)">编辑</el-button>
+                    <el-button type="text" @click="editRole(scope.row.roleCode)"
+                    v-if="hasAuthorization('sys:role:update')">编辑</el-button>
                     <el-divider direction="vertical"></el-divider>
 
                     <el-popconfirm
                         title="确人删除吗？"
                         @confirm="deleteRoles"
                     >
-                        <el-button type="text" slot="reference">删除</el-button>
+                        <el-button type="text" slot="reference"
+                        v-if="hasAuthorization('sys:role:delete')">删除</el-button>
                     </el-popconfirm>
                 </template>
             </el-table-column>
@@ -258,9 +262,9 @@ export default {
             });
         },
         getRoles() {
-            this.$axios.get('http://localhost:8080/getRolesTableData').then(Response => {
-                this.tableData = Response.data.data.tableData
-                this.total = Response.data.data.total
+            this.$axios.get('http://localhost:8081/sysRole/getRoles').then(Response => {
+                this.tableData = Response.data.data
+                this.total = Response.data.data
             })
         },
         getTreeData() {

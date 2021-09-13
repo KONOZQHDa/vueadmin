@@ -11,14 +11,16 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click="dialogVisible = true">新增</el-button>
+                <el-button type="primary" @click="dialogVisible = true"
+                v-if="hasAuthorization('sys:user:save')">新增</el-button>
             </el-form-item>
             <el-form-item>
                 <el-popconfirm
                     title="确人删除吗？"
                     @confirm="deleteUsers"
                 >
-                    <el-button type="danger" slot="reference" :disabled="deleteButtonDisabled">批量删除</el-button>
+                    <el-button type="danger" slot="reference" :disabled="deleteButtonDisabled"
+                    v-if="hasAuthorization('sys:user:delete')">批量删除</el-button>
                 </el-popconfirm>
             </el-form-item>
         </el-form>
@@ -89,16 +91,19 @@
                 width="300px"
                 label="操作">
                 <template slot-scope="scope">
-                    <el-button type="text" @click="assignRolesHandle(scope.row.id)">分配角色</el-button>
+                    <el-button type="text" @click="assignRolesHandle(scope.row.id)"
+                    v-if="hasAuthorization('sys:user:role')">分配角色</el-button>
                     <el-divider direction="vertical"></el-divider>
                     <el-popconfirm
                         title="确认重置密码吗？"
                         @confirm="resetPassword(scope.row.id)"
                     >
-                        <el-button type="text" slot="reference">重置密码</el-button>
+                        <el-button type="text" slot="reference"
+                        v-if="hasAuthorization('sys:user:repass')">重置密码</el-button>
                     </el-popconfirm>
                     <el-divider direction="vertical"></el-divider>
-                    <el-button type="text" @click="handleEditUser(scope.row.id)">编辑</el-button>
+                    <el-button type="text" @click="handleEditUser(scope.row.id)"
+                    v-if="hasAuthorization('sys:user:update')">编辑</el-button>
                     <el-divider direction="vertical"></el-divider>
 
                     <el-popconfirm

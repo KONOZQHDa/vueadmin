@@ -36,14 +36,14 @@ public class SysMenuController{
     public Result update(SysMenu menu){
         System.out.println(menu);
         sysMenuService.update(menu);
-        return Result.success(200,"更新用户成功！",null);
+        return Result.success(200,"更新成功！",null);
     }
 
     @SaCheckPermission("sys:menu:save")
     @GetMapping("addMenu")
     public Result addMenu(SysMenu menu){
         sysMenuService.insert(menu);
-        return Result.success(200,"新增用户成功！",null);
+        return Result.success(200,"新增菜单成功！",null);
     }
 
     @SaCheckPermission("sys:menu:delete")
