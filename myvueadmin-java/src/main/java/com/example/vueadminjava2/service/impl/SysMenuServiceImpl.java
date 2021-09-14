@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * (SysMenu)表服务实现类
@@ -94,7 +93,6 @@ public class SysMenuServiceImpl implements SysMenuService{
                     menu.getChildren().add(childMenu);
                 }
             }
-
             if (menu.getParentId() == 0L) {
                 finalMenu.add(menu);
             }

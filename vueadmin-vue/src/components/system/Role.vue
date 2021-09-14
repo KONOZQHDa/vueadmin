@@ -43,17 +43,17 @@
             <el-table-column
                 label="名称"
                 align="center"
-                prop="roleName"
+                prop="name"
                 width="120">
             </el-table-column>
             <el-table-column
-                prop="roleCode"
+                prop="code"
                 align="center"
                 label="唯一编码"
                 width="150">
             </el-table-column>
             <el-table-column
-                prop="description"
+                prop="remark"
                 align="center"
                 width="300px"
                 label="描述">
@@ -61,6 +61,7 @@
             <el-table-column
                 align="center"
                 width="90px"
+                prop="state"
                 label="状态">
                 <template slot-scope="scope">
                     <el-tag type="success" v-if="scope.row.state == 1">正常</el-tag>
@@ -74,11 +75,13 @@
                 <template slot-scope="scope">
                     <el-button type="text" @click="assignPermissions(scope.row.roleCode)"
                     v-if="hasAuthorization('sys:role:perm')">分配权限</el-button>
-                    <el-divider direction="vertical"></el-divider>
+                    <el-divider direction="vertical"
+                                v-if="hasAuthorization('sys:role:update')"></el-divider>
 
                     <el-button type="text" @click="editRole(scope.row.roleCode)"
                     v-if="hasAuthorization('sys:role:update')">编辑</el-button>
-                    <el-divider direction="vertical"></el-divider>
+                    <el-divider direction="vertical"
+                                v-if="hasAuthorization('sys:role:delete')"></el-divider>
 
                     <el-popconfirm
                         title="确人删除吗？"
@@ -178,16 +181,16 @@ export default {
                 state: ''
             },
             rules: {
-                roleName: [
+                name: [
                     {required: true, message: '请输入角色名称', trigger: 'blur'},
                 ],
-                roleCode: [
+                code: [
                     {required: true, message: '请输入角色唯一编码', trigger: 'blur'},
                 ],
                 state: [
                     {required: true, message: '请输入角色状态', trigger: 'blur'},
                 ],
-                description: [
+                remark: [
                     {required: true, message: '请输入角色描述', trigger: 'blur'},
                 ],
             },
@@ -264,7 +267,7 @@ export default {
         getRoles() {
             this.$axios.get('http://localhost:8081/sysRole/getRoles').then(Response => {
                 this.tableData = Response.data.data
-                this.total = Response.data.data
+                this.total = this.tableData.length
             })
         },
         getTreeData() {

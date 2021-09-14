@@ -83,7 +83,10 @@
                 <template slot-scope="scope">
                     <el-button type="text" @click="editMenuHandle(scope.row.id)"
                                v-if="hasAuthorization('sys:menu:update')">编辑</el-button>
-                    <el-divider direction="vertical"></el-divider>
+
+                    <el-divider direction="vertical"
+                                v-if="hasAuthorization('sys:menu:delete')"></el-divider>
+
                     <template>
                         <el-popconfirm
                             title="确人删除吗？"
@@ -291,7 +294,7 @@ export default {
         },
         //完成菜单修改
         editMenu(){
-
+            delete this.editForm.children
 
             request({
                 methods: 'get',

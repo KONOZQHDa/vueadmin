@@ -93,7 +93,7 @@
                 <template slot-scope="scope">
                     <el-button type="text" @click="assignRolesHandle(scope.row.id)"
                     v-if="hasAuthorization('sys:user:role')">分配角色</el-button>
-                    <el-divider direction="vertical"></el-divider>
+                    <el-divider direction="vertical" v-if="hasAuthorization('sys:user:role')"></el-divider>
                     <el-popconfirm
                         title="确认重置密码吗？"
                         @confirm="resetPassword(scope.row.id)"
@@ -101,16 +101,20 @@
                         <el-button type="text" slot="reference"
                         v-if="hasAuthorization('sys:user:repass')">重置密码</el-button>
                     </el-popconfirm>
-                    <el-divider direction="vertical"></el-divider>
+
+                    <el-divider direction="vertical" v-if="hasAuthorization('sys:user:repass')"></el-divider>
+
                     <el-button type="text" @click="handleEditUser(scope.row.id)"
                     v-if="hasAuthorization('sys:user:update')">编辑</el-button>
-                    <el-divider direction="vertical"></el-divider>
+                    <el-divider direction="vertical"
+                    v-if="hasAuthorization('sys:user:delete')"></el-divider>
 
                     <el-popconfirm
                         title="确人删除吗？"
                         @confirm="deleteUsers(scope.row.id)"
                     >
-                        <el-button type="text" slot="reference">删除</el-button>
+                        <el-button type="text" slot="reference"
+                        v-if="hasAuthorization('sys:user:delete')">删除</el-button>
                     </el-popconfirm>
                 </template>
             </el-table-column>

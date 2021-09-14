@@ -143,25 +143,25 @@ Mock.mock('http://localhost:8080/sys/menuList', 'get', () => {
 // 	return Result
 // })
 
-// Mock.mock('http://localhost:8080/getRolesTableData', 'get', () => {
-// 	Result.data = {
-// 		tableData: [
-// 			{
-// 				roleName: '普通用户',
-// 				roleCode: 'normal',
-// 				description: '',
-// 				state: 1,
-// 			}, {
-// 				roleName: '超级管理员',
-// 				roleCode: 'admin',
-// 				description: '',
-// 				state: 1,
-// 			}
-// 		],
-// 		total: 2
-// 	}
-// 	return Result
-// })
+Mock.mock('http://localhost:8080/getRolesTableData', 'get', () => {
+	Result.data = {
+		tableData: [
+			{
+				roleName: '普通用户',
+				roleCode: 'normal',
+				description: '',
+				state: 1,
+			}, {
+				roleName: '超级管理员',
+				roleCode: 'admin',
+				description: '',
+				state: 1,
+			}
+		],
+		total: 2
+	}
+	return Result
+})
 // Mock.mock('http://localhost:8080/getUsersTableData', 'get', () => {
 // 	Result.data = {
 // 		tableData: [
