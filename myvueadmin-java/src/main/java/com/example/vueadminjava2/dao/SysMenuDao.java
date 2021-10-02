@@ -3,6 +3,7 @@ package com.example.vueadminjava2.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.vueadminjava2.entity.SysMenu;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @author KONO 曾淇杭哒！
  * @since 2021-08-29 15:01:04
  */
+@Repository
 public interface SysMenuDao extends BaseMapper<SysMenu>{
 
     /**

@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -118,7 +115,8 @@ public class SysUserController{
     }
 
     @GetMapping("searchUsers")
-    public Result searchUsers(@RequestParam("word") String word){
+    public Result searchUsers(@RequestParam Map<String,String> params){
+        String word = params.get("word");
         List<SysUser> sysUsers = sysUserService.searchUsers(word);
         UsersResultData usersResultData = UsersResultData.create(sysUsers, sysUsers.size());
         return Result.success(usersResultData);

@@ -3,6 +3,7 @@ package com.example.vueadminjava2.service.impl;
 import com.example.vueadminjava2.entity.SysMenu;
 import com.example.vueadminjava2.dao.SysMenuDao;
 import com.example.vueadminjava2.service.SysMenuService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,7 +20,6 @@ import java.util.List;
 public class SysMenuServiceImpl implements SysMenuService{
     @Resource
     private SysMenuDao sysMenuDao;
-
     /**
      * 通过ID查询单条数据
      *

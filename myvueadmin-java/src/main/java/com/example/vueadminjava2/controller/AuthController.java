@@ -7,6 +7,7 @@ import com.example.vueadminjava2.commen.captcha.CaptchaStore;
 import com.example.vueadminjava2.commen.result.Result;
 import com.example.vueadminjava2.entity.SysUser;
 import com.example.vueadminjava2.service.impl.SysUserServiceImpl;
+import com.example.vueadminjava2.utils.RedisUtil;
 import com.google.code.kaptcha.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,8 @@ public class AuthController{
     private Producer producer;
     @Autowired
     private SysUserServiceImpl userServiceImpl;
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * @methordName:
@@ -59,7 +62,9 @@ public class AuthController{
         String captchaImg = str + encoder.encode(outputStream.toByteArray());
 
         //保存验证码信息用于登录时对比认证
-        CaptchaStore.saveCaptcha(key, code);
+        redisUtil.hset("capture", key, code, 180);
+        System.out.println("key:" + key);
+        System.out.println(redisUtil.hget("capture", key));
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("captchaKey", key);
@@ -71,9 +76,9 @@ public class AuthController{
     @PostMapping("/login")
     public Result login(@RequestBody SysUser user, Captcha captcha) {
         //判断验证码是否正确
-        if (CaptchaStore.verifyCaptcha(captcha.getCaptchaKey(), captcha.getCaptcha())) {
+        if (redisUtil.hget("capture", captcha.getCaptchaKey()).equals(captcha.getCaptcha())) {
             //当前验证码作废
-            CaptchaStore.disableCaptcha(captcha.getCaptchaKey());
+            redisUtil.del(captcha.getCaptchaKey());
             //判断用户名和密码是否合法,认证
             SysUser sysUser = userServiceImpl.queryByUserNameAndPassword(user.getUsername(), user.getPassword());
             if (sysUser != null) {
@@ -96,13 +101,13 @@ public class AuthController{
     }
 
     @GetMapping("/logout")
-    public Result logout(){
+    public Result logout() {
         StpUtil.logout();
         return Result.success(null);
     }
 
     @GetMapping("test")
-    public Result<String> test(@RequestParam("null") String k){
+    public Result<String> test(@RequestParam("null") String k) {
         System.out.println(k);
         return Result.success("test success");
     }

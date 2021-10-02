@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SysMenuDaoTest{
     @Autowired
     SysMenuServiceImpl sysMenuService;
+
     @Test
     void queryAllMenus() {
         List<SysMenu> sysMenus = sysMenuService.queryAllMenus();
