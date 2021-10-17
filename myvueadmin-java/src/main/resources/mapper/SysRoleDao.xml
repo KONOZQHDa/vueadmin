@@ -140,5 +140,10 @@
         SELECT *
         from vueadmin.sys_role
     </select>
+    <select id="searchRole" resultType="com.example.vueadminjava2.entity.SysRole">
+        select *
+        from vueadmin.sys_role
+        where name like CONCAT('%', #{keyword}, '%')
+    </select>
 </mapper>
 

@@ -1,11 +1,12 @@
 package com.example.vueadminjava2.service.impl;
 
-import com.example.vueadminjava2.entity.SysRoleMenu;
 import com.example.vueadminjava2.dao.SysRoleMenuDao;
+import com.example.vueadminjava2.entity.SysRoleMenu;
 import com.example.vueadminjava2.service.SysRoleMenuService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,5 +76,20 @@ public class SysRoleMenuServiceImpl implements SysRoleMenuService{
     @Override
     public boolean deleteById(Long id) {
         return this.sysRoleMenuDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public List<String> getMenusByRoleId(Long roleId) {
+        return sysRoleMenuDao.getMenusByRoleId(roleId);
+    }
+
+    @Override
+    public ArrayList<Integer> getMunusIdByRoleId(Long roleId) {
+        return sysRoleMenuDao.getMenusIdByRoleId(roleId);
+    }
+
+    @Override
+    public int deleteByRoleIdAndMenuId(Long roleId, Long menuId) {
+        return sysRoleMenuDao.deleteByRoleIdAndMenuIdInt(roleId, menuId);
     }
 }

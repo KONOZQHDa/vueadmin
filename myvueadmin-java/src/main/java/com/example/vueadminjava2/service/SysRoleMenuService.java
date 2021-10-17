@@ -2,6 +2,7 @@ package com.example.vueadminjava2.service;
 
 import com.example.vueadminjava2.entity.SysRoleMenu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,5 +53,11 @@ public interface SysRoleMenuService{
      * @return 是否成功
      */
     boolean deleteById(Long id);
+
+    List<String> getMenusByRoleId(Long roleId);
+
+    ArrayList<Integer> getMunusIdByRoleId(Long roleId);
+
+    int deleteByRoleIdAndMenuId(Long roleId, Long menuId);
 
 }

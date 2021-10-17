@@ -42,6 +42,20 @@
             </if>
         </where>
     </select>
+    <select id="getMenusByRoleId" resultType="string">
+        SELECT m.name
+        FROM sys_role_menu rm
+                 JOIN sys_menu m on rm.menu_id = m.id
+                 JOIN sys_role r ON rm.role_id = r.id
+        WHERE r.id = #{roleId}
+    </select>
+    <select id="getMenusIdByRoleId" resultType="java.lang.Integer">
+        SELECT m.id
+        FROM sys_role_menu rm
+                 JOIN sys_menu m on rm.menu_id = m.id
+                 JOIN sys_role r ON rm.role_id = r.id
+        WHERE r.id = #{roleId}
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
@@ -86,6 +100,12 @@
         delete
         from vueadmin.sys_role_menu
         where id = #{id}
+    </delete>
+    <delete id="deleteByRoleIdAndMenuIdInt">
+        delete
+        from vueadmin.sys_role_menu
+        where role_id = #{roleId}
+          and menu_id = #{menuId}
     </delete>
 
 </mapper>

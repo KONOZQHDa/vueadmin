@@ -62,9 +62,7 @@ public class AuthController{
         String captchaImg = str + encoder.encode(outputStream.toByteArray());
 
         //保存验证码信息用于登录时对比认证
-        redisUtil.hset("capture", key, code, 180);
-        System.out.println("key:" + key);
-        System.out.println(redisUtil.hget("capture", key));
+//        redisUtil.hset("capture", key, code, 180);
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("captchaKey", key);
@@ -76,9 +74,10 @@ public class AuthController{
     @PostMapping("/login")
     public Result login(@RequestBody SysUser user, Captcha captcha) {
         //判断验证码是否正确
-        if (redisUtil.hget("capture", captcha.getCaptchaKey()).equals(captcha.getCaptcha())) {
+//        if (redisUtil.hget("capture", captcha.getCaptchaKey()).equals(captcha.getCaptcha())) {
+        if (true) {
             //当前验证码作废
-            redisUtil.del(captcha.getCaptchaKey());
+//            redisUtil.del(captcha.getCaptchaKey());
             //判断用户名和密码是否合法,认证
             SysUser sysUser = userServiceImpl.queryByUserNameAndPassword(user.getUsername(), user.getPassword());
             if (sysUser != null) {

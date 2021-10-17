@@ -87,7 +87,9 @@ public interface SysRoleDao{
      */
     List<SysRole> getRolesByUserId(Object userId);
 
-//    查询所有角色
+    //    查询所有角色
     List<SysRole> getRoles();
+
+    List<SysRole> searchRole(String word);
 }
 

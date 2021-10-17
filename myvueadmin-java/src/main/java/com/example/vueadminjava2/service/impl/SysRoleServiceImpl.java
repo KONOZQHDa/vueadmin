@@ -1,8 +1,7 @@
 package com.example.vueadminjava2.service.impl;
 
-import com.example.vueadminjava2.entity.SysRole;
 import com.example.vueadminjava2.dao.SysRoleDao;
-import com.example.vueadminjava2.entity.SysUser;
+import com.example.vueadminjava2.entity.SysRole;
 import com.example.vueadminjava2.service.SysRoleService;
 import org.springframework.stereotype.Service;
 
@@ -94,5 +93,9 @@ public class SysRoleServiceImpl implements SysRoleService{
         return sysRoleDao.getRoles();
     }
 
+    @Override
+    public List<SysRole> searchRole(String word) {
+        return sysRoleDao.searchRole(word);
+    }
 }
 

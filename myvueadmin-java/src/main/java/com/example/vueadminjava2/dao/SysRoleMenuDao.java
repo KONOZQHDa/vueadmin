@@ -3,6 +3,7 @@ package com.example.vueadminjava2.dao;
 import com.example.vueadminjava2.entity.SysRoleMenu;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -78,6 +79,18 @@ public interface SysRoleMenuDao{
      * @return 影响行数
      */
     int deleteById(Long id);
+
+    /**
+     * 获取某一角色所拥有的权限的名称集合
+     *
+     * @param roleId 主键
+     * @return 影响行数
+     */
+    List<String> getMenusByRoleId(Long roleId);
+
+    ArrayList<Integer> getMenusIdByRoleId(Long roleId);
+
+    int deleteByRoleIdAndMenuIdInt(@Param("roleId") Long roleId, @Param("menuId") Long menuId);
 
 }
 

@@ -7,10 +7,10 @@ spring:
     password: 123456
     url: jdbc:mysql://localhost:3306/vueadmin?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
-  redis:
-    host: 47.113.223.114
-    password: 15960542908zqh
-    port: 6379
+  #redis:
+  #  host: 47.113.223.114
+  #  password: 15960542908zqh
+  #  port: 6379
 
 sa-token:
   token-name: vueadmintoken

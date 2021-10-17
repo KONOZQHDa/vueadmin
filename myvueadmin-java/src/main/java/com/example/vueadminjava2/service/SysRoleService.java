@@ -1,7 +1,6 @@
 package com.example.vueadminjava2.service;
 
 import com.example.vueadminjava2.entity.SysRole;
-import com.example.vueadminjava2.entity.SysUser;
 
 import java.util.List;
 
@@ -64,4 +63,5 @@ public interface SysRoleService{
 
     List<SysRole> getRoles();
 
+    List<SysRole> searchRole(String word);
 }
