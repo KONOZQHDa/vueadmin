@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vueadminjava2.dao.SortDao">
+
+    <resultMap type="com.example.vueadminjava2.entity.Sort" id="SortMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="sortName" column="name" jdbcType="VARCHAR"/>
+        <result property="usful" column="usful" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vueadmin.type(name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.sortname})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vueadmin.type(name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.sortname})
+        </foreach>
+        on duplicate key update
+        name = values(sortName)
+    </insert>
+
+</mapper>
+

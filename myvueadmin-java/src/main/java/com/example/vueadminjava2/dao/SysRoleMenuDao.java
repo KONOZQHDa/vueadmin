@@ -1,5 +1,6 @@
 package com.example.vueadminjava2.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.vueadminjava2.entity.SysRoleMenu;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author KONO 曾淇杭哒！
  * @since 2021-08-29 15:02:48
  */
-public interface SysRoleMenuDao{
+public interface SysRoleMenuDao extends BaseMapper<SysRoleMenu>{
 
     /**
      * 通过ID查询单条数据

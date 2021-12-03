@@ -18,19 +18,27 @@ public class Result<T>{
     private String message;
     private T data;
 
-    public static <T> Result<T> success(T data){
-        return new Result(200,"success",data);
+    public static <T> Result<T> success(T data) {
+        return new Result(200, "success", data);
     }
 
-    public static <R> Result<R> success(int code,String message,R data){
-        return new Result(code,message,data);
+    public static <R> Result<R> success(int code, String message, R data) {
+        return new Result(code, message, data);
     }
 
-    public static <T> Result<T> fail(T data){
-        return new Result(400,"fail",data);
+    public static <T> Result<T> fail(T data) {
+        return new Result(400, "fail", data);
     }
 
-    public static <T> Result<T> fail(int code,String message,T data){
-        return new Result(code,message,data);
+    public static <T> Result<T> fail(int code, String message, T data) {
+        return new Result(code, message, data);
+    }
+
+    public static <T> Result<T> successWithMessage(String message, T data) {
+        return new Result(200, message, data);
+    }
+
+    public static <T> Result<T> failWithMessage(String message, T data) {
+        return new Result(400, message, data);
     }
 }

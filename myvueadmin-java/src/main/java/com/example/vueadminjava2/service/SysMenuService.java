@@ -57,6 +57,7 @@ public interface SysMenuService{
 
     List<SysMenu> treeMenus(List<SysMenu> menus);
 
+    List<SysMenu> queryMenusByUserId(Long userId);
 
 
 }

@@ -1,7 +1,7 @@
 package com.example.vueadminjava2.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.vueadminjava2.entity.SysUser;
-import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @since 2021-08-29 15:03:02
  */
 @Repository
-public interface SysUserDao{
+public interface SysUserDao extends BaseMapper<SysUser>{
 
     /**
      * 通过ID查询单条数据
@@ -23,6 +23,7 @@ public interface SysUserDao{
      * @return 实例对象
      */
     SysUser queryById(Long id);
+
     /**
      * 通过username查询单条数据
      *
@@ -30,8 +31,7 @@ public interface SysUserDao{
      * @param password
      * @return 实例对象
      */
-    SysUser queryByUserNameAndPassword(@Param("username") String username,@Param("password") String password);
-
+    SysUser queryByUserNameAndPassword(@Param("username") String username, @Param("password") String password);
 
 
     /**
@@ -91,6 +91,7 @@ public interface SysUserDao{
      * @return 影响行数
      */
     int deleteById(Long id);
+
     /**
      * 通过主键查询用户所拥有权限
      *
@@ -99,13 +100,15 @@ public interface SysUserDao{
      */
     List<String> getAuthoritiesById(Object id);
 
-//    查询所有用户
+    //    查询所有用户
     List<SysUser> queryAllUsers();
 
-//    查询所有用户的数量
-    Integer  getTotalCount();
+    //    查询所有用户的数量
+    Integer getTotalCount();
 
-//    根据用户名模糊查询
+    //    根据用户名模糊查询
     List<SysUser> fuzzyQueryByUserName(String userName);
+
+    SysUser queryByUsername(String userName);
 }
 

@@ -1,9 +1,7 @@
 package com.example.vueadminjava2.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.example.vueadminjava2.entity.SysUser;
 import com.example.vueadminjava2.dao.SysUserDao;
+import com.example.vueadminjava2.entity.SysUser;
 import com.example.vueadminjava2.service.SysUserService;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +29,7 @@ public class SysUserServiceImpl implements SysUserService{
     public SysUser queryById(Long id) {
         return this.sysUserDao.queryById(id);
     }
+
     /**
      * 通过username查询单条数据
      *
@@ -38,8 +37,8 @@ public class SysUserServiceImpl implements SysUserService{
      * @return 实例对象
      */
     @Override
-    public SysUser queryByUserNameAndPassword(String username,String password) {
-        return this.sysUserDao.queryByUserNameAndPassword(username,password);
+    public SysUser queryByUserNameAndPassword(String username, String password) {
+        return this.sysUserDao.queryByUserNameAndPassword(username, password);
     }
 
     /**
@@ -107,5 +106,10 @@ public class SysUserServiceImpl implements SysUserService{
     @Override
     public List<SysUser> searchUsers(String userName) {
         return sysUserDao.fuzzyQueryByUserName(userName);
+    }
+
+    @Override
+    public SysUser getUserByUserName(String userName) {
+        return sysUserDao.queryByUsername(userName);
     }
 }

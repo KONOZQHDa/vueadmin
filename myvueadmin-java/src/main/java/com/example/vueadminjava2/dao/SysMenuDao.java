@@ -84,5 +84,7 @@ public interface SysMenuDao extends BaseMapper<SysMenu>{
 
     List<SysMenu> queryAllMenus();
 
+    List<SysMenu> queryMenusByUserId(Long userId);
+
 }
 

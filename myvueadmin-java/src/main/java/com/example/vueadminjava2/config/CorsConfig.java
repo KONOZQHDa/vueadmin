@@ -23,6 +23,7 @@ public class CorsConfig implements WebMvcConfigurer{
         corsConfiguration.addExposedHeader("Authorization");
         return corsConfiguration;
     }
+
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -33,7 +34,7 @@ public class CorsConfig implements WebMvcConfigurer{
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedOrigins("*")
-//                .allowCredentials(true)
+                //                .allowCredentials(true)
                 .allowedMethods("GET", "POST", "DELETE", "PUT")
                 .maxAge(3600)
                 .allowedHeaders("*");

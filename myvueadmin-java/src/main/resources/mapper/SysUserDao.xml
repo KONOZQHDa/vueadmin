@@ -13,6 +13,7 @@
         <result property="updated" column="updated" jdbcType="TIMESTAMP"/>
         <result property="lastLogin" column="last_login" jdbcType="TIMESTAMP"/>
         <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="salt" column="salt" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--查询单个-->
@@ -26,7 +27,8 @@
                created,
                updated,
                last_login,
-               state
+               state,
+               salt
         from vueadmin.sys_user
         where id = #{id}
     </select>
@@ -41,7 +43,8 @@
                created,
                updated,
                last_login,
-               state
+               state,
+               salt
         from vueadmin.sys_user
         where username = #{username}
           and password = #{password}
@@ -57,7 +60,8 @@
                created,
                updated,
                last_login,
-               state
+               state,
+               salt
         from vueadmin.sys_user limit #{offset}, #{limit}
     </select>
 
@@ -65,7 +69,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="SysUserMap">
         select
-        id, username, password, avatar, email, city, created, updated, last_login, state
+        id, username, password, avatar, email, city, created, updated, last_login, state,salt
         from vueadmin.sys_user
         <where>
             <if test="id != null">
@@ -103,21 +107,23 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into vueadmin.sys_user(username, avatar, email, city, created, updated, last_login, state)
-        values (#{username}, #{avatar}, #{email}, #{city}, #{created}, #{updated}, #{lastLogin}, #{state})
+        insert into vueadmin.sys_user(username, password, avatar, email, city, created, updated, last_login, state,
+                                      salt)
+        values (#{username}, #{password}, #{avatar}, #{email}, #{city}, #{created}, #{updated}, #{lastLogin}, #{state},
+                #{salt})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into vueadmin.sys_user(username, password, avatar, email, city, created, updated, last_login, state)
+        insert into vueadmin.sys_user(username, password, avatar, email, city, created, updated, last_login, state,salt)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.username}, #{entity.password}, #{entity.avatar}, #{entity.email}, #{entity.city},
-            #{entity.created}, #{entity.updated}, #{entity.lastLogin}, #{entity.state})
+            #{entity.created}, #{entity.updated}, #{entity.lastLogin}, #{entity.state},#{salt})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into vueadmin.sys_user(username, password, avatar, email, city, created, updated, last_login, state)
+        insert into vueadmin.sys_user(username, password, avatar, email, city, created, updated, last_login, state,salt)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.username}, #{entity.password}, #{entity.avatar}, #{entity.email}, #{entity.city},
@@ -160,6 +166,9 @@
             <if test="state != null">
                 state = #{state},
             </if>
+            <if test="salt != null">
+                salt = #{salt}
+            </if>
         </set>
         where id = #{id}
     </update>
@@ -180,19 +189,39 @@
                  JOIN sys_menu AS m ON m.id = rm.menu_id
     </select>
 
-<!--    查询所有用户-->
+
+    <!--    查询所有用户-->
     <select id="queryAllUsers" resultMap="SysUserMap">
-        select * from vueadmin.sys_user
+        select *
+        from vueadmin.sys_user
     </select>
 
-<!--    查询所有用户的总数量-->
+    <!--    查询所有用户的总数量-->
     <select id="getTotalCount" resultType="integer">
-        select count(*) from vueadmin.sys_user
+        select count(*)
+        from vueadmin.sys_user
     </select>
 
-<!--    通过用户名模糊查询用户-->
+    <!--    通过用户名模糊查询用户-->
     <select id="fuzzyQueryByUserName" resultType="sysUser">
-        select * from vueadmin.sys_user where username  like CONCAT('%',#{keyword},'%')
+        select *
+        from vueadmin.sys_user
+        where username like CONCAT('%', #{keyword}, '%')
+    </select>
+    <select id="queryByUsername" resultType="com.example.vueadminjava2.entity.SysUser">
+        select id,
+               username,
+               password,
+               avatar,
+               email,
+               city,
+               created,
+               updated,
+               last_login,
+               state,
+               salt
+        from vueadmin.sys_user
+        where username = #{username}
     </select>
 </mapper>
 

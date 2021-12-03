@@ -34,49 +34,71 @@ const Result = {
 // 	return Result
 // })
 
-Mock.mock('http://localhost:8080/sys/menuList', 'get', () => {
-	Result.data = {
-		nav: [
-			{
-				name: 'systemManager',
-				title: '系统管理',
-				icon: 'el-icon-menu',
-				childrenMenus: [
-					{
-						name: 'sysUsers',
-						title: '用户管理',
-						icon: 'el-icon-s-custom',
-						path: '/sys/users',
-						component: '@/components/system/User.vue'
-					},
-					{
-						name: 'sysRoles',
-						title: '角色管理',
-						icon: 'el-icon-s-marketing',
-						path: '/sys/roles',
-						component: '@/components/system/Role.vue'
-					},
-					{
-						name: 'sysMenus',
-						title: '菜单管理',
-						icon: 'el-icon-s-tools',
-						path: '/sys/menus',
-						component: '@/components/system/Menu.vue'
-					}
-				]
-			},
-			{
-				name: 'systemTools',
-				title: '系统工具',
-				icon: 'el-icon-star-on',
-				childrenMenus: null
-			}
-		],
-		authorizations: [],
-	}
-
-	return Result
-})
+// Mock.mock('http://localhost:8080/sys/menuList', 'get', () => {
+// 	Result.data = {
+// 		nav: [
+// 			{
+// 				name: 'backgroundManage',
+// 				title: '后台管理',
+// 				icon: 'el-icon-star-on',
+// 				children: [
+// 					{
+// 						name: 'bookManage',
+// 						title: '书籍管理',
+// 						icon: 'el-icon-s-management',
+// 						path: '/sys/bookManage',
+// 						component: 'system/BookManage.vue'
+// 					}
+// 				]
+// 			},
+// 			{
+// 				name: 'systemManager',
+// 				title: '系统管理',
+// 				icon: 'el-icon-menu',
+// 				children: [
+// 					{
+// 						name: 'sysUsers',
+// 						title: '用户管理',
+// 						icon: 'el-icon-s-custom',
+// 						path: '/sys/users',
+// 						component: 'system/User.vue'
+// 					},
+// 					{
+// 						name: 'sysRoles',
+// 						title: '角色管理',
+// 						icon: 'el-icon-s-marketing',
+// 						path: '/sys/roles',
+// 						component: 'system/Role.vue'
+// 					},
+// 					{
+// 						name: 'sysMenus',
+// 						title: '菜单管理',
+// 						icon: 'el-icon-s-tools',
+// 						path: '/sys/menus',
+// 						component: 'system/Menu.vue'
+// 					}
+// 				]
+// 			},
+// 			{
+// 				name: 'systemTools',
+// 				title: '系统工具',
+// 				icon: 'el-icon-s-tools',
+// 				children: [
+// 					{
+// 						name: 'dictionary',
+// 						title: '数字字典',
+// 						icon: 'el-icon-document',
+// 						path: '/sys/dictionary',
+// 						component: 'system/Dictionary.vue'
+// 					}
+// 				]
+// 			}
+// 		],
+// 		authorizations: [],
+// 	}
+//
+// 	return Result
+// })
 
 // Mock.mock('http://localhost:8080/getMenusTableData', 'get', () => {
 // 	Result.data = {
@@ -143,25 +165,25 @@ Mock.mock('http://localhost:8080/sys/menuList', 'get', () => {
 // 	return Result
 // })
 
-Mock.mock('http://localhost:8080/getRolesTableData', 'get', () => {
-	Result.data = {
-		tableData: [
-			{
-				roleName: '普通用户',
-				roleCode: 'normal',
-				description: '',
-				state: 1,
-			}, {
-				roleName: '超级管理员',
-				roleCode: 'admin',
-				description: '',
-				state: 1,
-			}
-		],
-		total: 2
-	}
-	return Result
-})
+// Mock.mock('http://localhost:8080/getRolesTableData', 'get', () => {
+// 	Result.data = {
+// 		tableData: [
+// 			{
+// 				roleName: '普通用户',
+// 				roleCode: 'normal',
+// 				description: '',
+// 				state: 1,
+// 			}, {
+// 				roleName: '超级管理员',
+// 				roleCode: 'admin',
+// 				description: '',
+// 				state: 1,
+// 			}
+// 		],
+// 		total: 2
+// 	}
+// 	return Result
+// })
 // Mock.mock('http://localhost:8080/getUsersTableData', 'get', () => {
 // 	Result.data = {
 // 		tableData: [

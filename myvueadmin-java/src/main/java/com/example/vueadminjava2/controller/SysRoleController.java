@@ -47,8 +47,13 @@ public class SysRoleController{
 
     @GetMapping("addRole")
     public Result addRole(SysRole role) {
-        sysRoleService.insert(role);
-        return Result.success(200, "添加角色成功！", null);
+        try {
+            sysRoleService.insert(role);
+            return Result.success(200, "添加角色成功！", null);
+        } catch (org.springframework.dao.DuplicateKeyException e) {
+            return Result.fail(400, "唯一编码已存在", null);
+        }
+
     }
 
     @GetMapping("searchRole")

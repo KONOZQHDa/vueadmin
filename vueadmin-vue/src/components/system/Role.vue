@@ -3,7 +3,7 @@
     <!--        顶部操作栏，用行内表单这样就不用自己再调样式和间距了-->
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item>
-        <el-input v-model="searchKey" clearable placeholder="请输入角色名"></el-input>
+        <el-input v-model="searchKey" clearable placeholder="请输入角色名..."></el-input>
       </el-form-item>
 
       <el-form-item>
@@ -66,8 +66,9 @@
           prop="state"
           label="状态">
         <template slot-scope="scope">
-          <el-tag type="success" v-if="scope.row.state == 1">正常</el-tag>
-          <el-tag type="danger" v-if="scope.row.state == 0">禁用</el-tag>
+          <el-tag :type="formatByDiction(usfulStatusTagType,scope.row.state)"
+          >{{ formatByDiction(glUsful, scope.row.state) }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -76,7 +77,7 @@
           label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="assignPermissions(scope.row.id)"
-                     v-if="hasAuthorization('sys:role:perm')">分配权限
+                     v-if="hasAuthorization('sys:role:perm')">管理权限
           </el-button>
           <el-divider direction="vertical"
                       v-if="hasAuthorization('sys:role:update')"></el-divider>
@@ -98,18 +99,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <!--        分页-->
-    <div style="display: flex;flex-direction: row; margin-top: 18px;">
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[10, 20, 30, 40]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-      </el-pagination>
-    </div>
     <!--        点击新增或编辑后弹出的对话框-->
     <el-dialog
         title="角色信息"
@@ -175,8 +164,17 @@
 </template>
 
 <script>
-import request from "@/network/request";
-import qs from "qs";
+import {
+  addRole,
+  assignPermmission,
+  deletePermmission,
+  deleteRole,
+  getPermissions,
+  getRoles,
+  searchRole,
+  updateRole
+} from "@/api/moudles/sys_role";
+import {getMunus} from "@/api/moudles/sys_menu";
 
 export default {
   name: "Role",
@@ -236,13 +234,10 @@ export default {
     },
     search() {
       if (this.searchKey) {
-        request({
-          methods: 'get',
-          url: 'http://localhost:8081/sysRole/searchRole',
-          params: {
-            word: this.searchKey
-          }
-        }).then(resp => {
+        let params = {
+          word: this.searchKey
+        }
+        searchRole(params).then(resp => {
           this.tableData = resp.data.data
         }, error => {
           this.$message.error(error)
@@ -253,13 +248,10 @@ export default {
     deleteRoles(id) {
       //删除一个
       if (id) {
-        request({
-          methods: 'get',
-          url: 'http://localhost:8081/sysRole/deleteRole',
-          params: {
-            ids: id
-          }
-        }).then(resp => {
+        let params = {
+          ids: id
+        }
+        deleteRole(params).then(resp => {
           this.$message.success(resp.data.message)
           this.getRoles()
         }, error => {
@@ -272,16 +264,10 @@ export default {
         this.multipleSelection.forEach(item => {
           ids.unshift(item.id)
         })
-        request({
-          methods: 'get',
-          url: 'http://localhost:8081/sysRole/deleteRole',
-          params: {
-            ids: ids
-          },
-          paramsSerializer: params => {
-            return qs.stringify(params, {indices: false})
-          }
-        }).then(resp => {
+        let params = {
+          ids: ids
+        }
+        deleteRole(params).then(resp => {
           this.$message.success(resp.data.message)
           this.getRoles()
         }, error => {
@@ -303,13 +289,6 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    //分页组件自带函数
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    },
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.editForm = {}
@@ -320,11 +299,7 @@ export default {
         if (valid) {
           //表单中id有值则为编辑用户操作，若id没有值则为添加用户操作
           if (this.editForm.id) {
-            request({
-              methods: 'get',
-              url: 'http://localhost:8081/sysRole/updateRole',
-              params: this.editForm
-            }).then(resp => {
+            updateRole(this.editForm).then(resp => {
               this.$message.success(resp.data.message)
               this.getRoles()
               this.dialogVisible = false
@@ -333,11 +308,7 @@ export default {
               this.$message.error(error)
             })
           } else {
-            request({
-              methods: 'get',
-              url: 'http://localhost:8081/sysRole/addRole',
-              params: this.editForm
-            }).then(resp => {
+            addRole(this.editForm).then(resp => {
               this.$message.success(resp.data.message)
               this.getRoles()
               this.resetForm(formName)
@@ -356,14 +327,18 @@ export default {
       });
     },
     getRoles() {
-      this.$axios.get('http://localhost:8081/sysRole/getRoles').then(Response => {
-        this.tableData = Response.data.data
+      getRoles().then(resp => {
+        this.tableData = resp.data.data
         this.total = this.tableData.length
+      }, error => {
+        this.$message.error(error)
       })
     },
     getTreeData() {
-      this.$axios.get('http://localhost:8081/sysMenu/list').then(Response => {
-        this.treeData = Response.data.data
+      getMunus().then(resp => {
+        this.treeData = resp.data.data
+      }, error => {
+        this.$message.error(error)
       })
     },
     //分配权限click事件回调函数,只完成显示对话框及其数据回显，真正的是表单提交assignPermissionsHandle方法响应到后端
@@ -376,35 +351,28 @@ export default {
       this.selectedRoleId = roleId
     },
     getRolePermissions(roleId) {
-      request({
-        methods: 'get',
-        url: 'http://localhost:8081/sysRole/getPermissions',
-        params: {
-          roleId
-        }
-      }).then(resp => {
+      let params = {
+        roleId
+      }
+      getPermissions(params).then(resp => {
         this.permissions = resp.data.data
       }, error => {
         this.$message.error(error)
       })
     },
-    //发生请求进行给角色分配权限
+    //发送请求进行给角色分配权限
     assignPermissionsHandle() {
       //拿到树形控件中选中项的id值数组
       let menuIds = this.$refs.tree.getCheckedKeys();
-      request({
-        methods: 'get',
-        url: 'http://localhost:8081/sysRole/assignPermission',
-        params: {
-          roleId: this.selectedRoleId,
-          menuIds
-        },
-        paramsSerializer: params => {
-          return qs.stringify(params, {indices: false})
-        }
-      }).then(resp => {
+      let params = {
+        roleId: this.selectedRoleId,
+        menuIds
+      }
+      assignPermmission(params).then(resp => {
         this.$message.success(resp.data.message)
         this.getRolePermissions(this.selectedRoleId)
+        this.$refs.tree.setCheckedKeys([])
+        
       }, error => {
         this.$message.error(error)
       })
@@ -412,19 +380,14 @@ export default {
     removePermissionHandle() {
       //拿到树形控件中选中项的id值数组
       let menuIds = this.$refs.tree.getCheckedKeys();
-      request({
-        methods: 'get',
-        url: 'http://localhost:8081/sysRole/deletePermission',
-        params: {
-          roleId: this.selectedRoleId,
-          menuIds
-        },
-        paramsSerializer: params => {
-          return qs.stringify(params, {indices: false})
-        }
-      }).then(resp => {
+      let params = {
+        roleId: this.selectedRoleId,
+        menuIds
+      }
+      deletePermmission(params).then(resp => {
         this.$message.success(resp.data.message)
         this.getRolePermissions(this.selectedRoleId)
+        this.$refs.tree.setCheckedKeys([])
       }, error => {
         this.$message.error(error)
       })

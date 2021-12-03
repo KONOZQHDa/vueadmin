@@ -4,15 +4,18 @@ import router from './router'
 import store from './store'
 import Element from 'element-ui'
 import "element-ui/lib/theme-chalk/index.css"
-require("./network/mock.js")
-import axios from "axios";
 import './mixin/mixin'
+
+require("./network/mock.js")
 
 Vue.use(Element)
 Vue.config.productionTip = false
-Vue.prototype.$axios = axios
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+	router,
+	store,
+	created() {
+		this.$store.dispatch('diction/getDicTypes')
+		Vue.prototype.$bus = this
+	},
+	render: h => h(App)
 }).$mount('#app')

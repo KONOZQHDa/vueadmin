@@ -6,12 +6,12 @@
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="routeName" column="route_name" jdbcType="VARCHAR"/>
         <result property="path" column="path" jdbcType="VARCHAR"/>
         <result property="perms" column="perms" jdbcType="VARCHAR"/>
         <result property="component" column="component" jdbcType="VARCHAR"/>
         <result property="type" column="type" jdbcType="INTEGER"/>
         <result property="icon" column="icon" jdbcType="VARCHAR"/>
-        <result property="ordernum" column="orderNum" jdbcType="INTEGER"/>
         <result property="created" column="created" jdbcType="TIMESTAMP"/>
         <result property="updated" column="updated" jdbcType="TIMESTAMP"/>
         <result property="state" column="state" jdbcType="INTEGER"/>
@@ -22,12 +22,12 @@
         select id,
                parent_id,
                name,
+               route_name,
                path,
                perms,
                component,
                type,
                icon,
-               orderNum,
                created,
                updated,
                state
@@ -40,12 +40,12 @@
         select id,
                parent_id,
                name,
+               route_name,
                path,
                perms,
                component,
                type,
                icon,
-               orderNum,
                created,
                updated,
                state
@@ -55,7 +55,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="SysMenuMap">
         select
-        id, parent_id, name, path, perms, component, type, icon, orderNum, created, updated, state
+        id, parent_id, name,route_name, path, perms, component, type, icon, created, updated, state
         from vueadmin.sys_menu
         <where>
             <if test="id != null">
@@ -98,35 +98,41 @@
     </select>
 
     <select id="queryAllMenus" resultType="sysMenu">
-        select * from vueadmin.sys_menu
+        select *
+        from vueadmin.sys_menu
+        where state = 1
     </select>
     <!--新增所有列-->
     <insert id="insertByMybatis" keyProperty="id" useGeneratedKeys="true">
-        insert into vueadmin.sys_menu(parent_id, name, path, perms, component, type, icon, orderNum,state)
-        values (#{parentId}, #{name}, #{path}, #{perms}, #{component}, #{type}, #{icon}, #{ordernum},#{state})
+        insert into vueadmin.sys_menu(parent_id, name, route_name, path, perms, component, type, icon, state)
+        values (#{parentId}, #{name}, #{routeName}, #{path}, #{perms}, #{component}, #{type}, #{icon}, #{ordernum},
+                #{state})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into vueadmin.sys_menu(parent_id, name, path, perms, component, type, icon, orderNum, created, updated,
+        insert into vueadmin.sys_menu(parent_id, name,route_name, path, perms, component, type, icon, created, updated,
         state)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.parentId}, #{entity.name}, #{entity.path}, #{entity.perms}, #{entity.component}, #{entity.type},
+            (#{entity.parentId}, #{entity.name}, #{entity.routeName}, #{entity.path}, #{entity.perms},
+            #{entity.component}, #{entity.type},
             #{entity.icon}, #{entity.ordernum}, #{entity.created}, #{entity.updated}, #{entity.state})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into vueadmin.sys_menu(parent_id, name, path, perms, component, type, icon, orderNum, created, updated,
+        insert into vueadmin.sys_menu(parent_id, name,route_name, path, perms, component, type, icon, created, updated,
         state)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.parentId}, #{entity.name}, #{entity.path}, #{entity.perms}, #{entity.component}, #{entity.type},
+            (#{entity.parentId}, #{entity.name}, #{entity.routeName}, #{entity.path}, #{entity.perms},
+            #{entity.component}, #{entity.type},
             #{entity.icon}, #{entity.ordernum}, #{entity.created}, #{entity.updated}, #{entity.state})
         </foreach>
         on duplicate key update
-        parent_id = values(parent_id) , name = values(name) , path = values(path) , perms = values(perms) , component =
-        values(component) , type = values(type) , icon = values(icon) , orderNum = values(orderNum) , created =
+        parent_id = values(parent_id) , name = values(name), route_name = values(route_name) , path = values(path) ,
+        perms = values(perms) , component =
+        values(component) , type = values(type) , icon = values(icon) , created =
         values(created) , updated = values(updated) , state = values(state)
     </insert>
 
@@ -139,6 +145,9 @@
             </if>
             <if test="name != null and name != ''">
                 name = #{name},
+            </if>
+            <if test="routeName != null and name != ''">
+                name = #{routeName},
             </if>
             <if test="path != null and path != ''">
                 path = #{path},
@@ -155,9 +164,7 @@
             <if test="icon != null and icon != ''">
                 icon = #{icon},
             </if>
-            <if test="ordernum != null">
-                orderNum = #{ordernum},
-            </if>
+
             <if test="created != null">
                 created = #{created},
             </if>
@@ -175,6 +182,16 @@
         from vueadmin.sys_menu
         where id = #{id}
     </delete>
+
+    <!--    通过用户id获取其拥有的所有菜单权限-->
+    <select id="queryMenusByUserId" resultType="com.example.vueadminjava2.entity.SysMenu">
+        SELECT m.*
+        FROM (SELECT role_id FROM sys_user_role WHERE user_id = #{userId}) AS roles
+                 JOIN sys_role_menu AS rm ON roles.role_id = rm.role_id
+                 JOIN sys_menu AS m ON m.id = rm.menu_id
+        where m.type = 0
+           or m.type = 1
+    </select>
 
 </mapper>
 

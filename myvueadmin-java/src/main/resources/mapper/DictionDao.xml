@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vueadminjava2.dao.DictionDao">
+
+    <resultMap type="com.example.vueadminjava2.entity.Diction" id="DictionMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="dicKey" column="dic_key" jdbcType="VARCHAR"/>
+        <result property="dicValue" column="dic_value" jdbcType="VARCHAR"/>
+        <result property="dictypeId" column="dicype_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vueadmin.diction(dic_key, dic_value, dicype_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.dicKey}, #{entity.dicValue}, #{entity.dicypeId})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vueadmin.diction(dic_key, dic_value, dicype_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.dicKey}, #{entity.dicValue}, #{entity.dicypeId})
+        </foreach>
+        on duplicate key update
+        dic_key = values(dic_key) , dic_value = values(dic_value) , dicype_id = values(dicype_id)
+    </insert>
+
+</mapper>
+

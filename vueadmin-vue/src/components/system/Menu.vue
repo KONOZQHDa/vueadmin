@@ -13,21 +13,19 @@
         row-key="id"
         border
         stripe
-
-        default-expand-all
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column
           prop="name"
           label="名称"
           sortable
           align="center"
-          width="190">
+          width="170">
       </el-table-column>
       <el-table-column
           prop="perms"
           label="权限编码"
           align="center"
-          width="190">
+          width="160">
       </el-table-column>
       <el-table-column
           prop="type"
@@ -45,13 +43,19 @@
           prop="path"
           label="菜单URL"
           align="center"
-          width="170px">
+          width="150px">
       </el-table-column>
       <el-table-column
           prop="component"
           label="菜单组件"
           align="center"
-          width="170">
+          width="160">
+      </el-table-column>
+      <el-table-column
+          prop="routeName"
+          label="路由名称"
+          align="center"
+          width="160">
       </el-table-column>
       <el-table-column
           prop="state"
@@ -59,19 +63,20 @@
           align="center"
           label="状态">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.state === 1" type="success">正常</el-tag>
-          <el-tag v-if="scope.row.state === 0" type="danger">禁用</el-tag>
+          <el-tag :type="formatByDiction(usfulStatusTagType,scope.row.state)"
+          >{{ formatByDiction(glUsful, scope.row.state) }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column
           prop="created"
-          width="180px"
+          width="160px"
           align="center"
           label="创建时间">
       </el-table-column>
       <el-table-column
           prop="updated"
-          width="180px"
+          width="160px"
           align="center"
           label="更新时间">
       </el-table-column>
@@ -128,6 +133,12 @@
         <el-form-item label="菜单URL" prop="path">
           <el-input v-model="editForm.path"></el-input>
         </el-form-item>
+        <el-form-item label="路由名称" prop="routeName">
+          <el-input v-model="editForm.routeName"></el-input>
+        </el-form-item>
+        <el-form-item label="菜单图标" prop="icon">
+          <el-input v-model="editForm.icon"></el-input>
+        </el-form-item>
         <el-form-item label="菜单组件" prop="component">
           <el-input v-model="editForm.component"></el-input>
         </el-form-item>
@@ -142,8 +153,9 @@
         </el-form-item>
         <el-form-item label="状态" prop="state">
           <el-radio-group v-model="editForm.state">
-            <el-radio :label="1">正常</el-radio>
-            <el-radio :label="0">禁用</el-radio>
+            <el-radio v-for="(item,index) in $store.state.diction.dictypes[glUsful]" :label="item.dicKey"
+                      :key="index">{{ item.dicValue }}
+            </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item>
@@ -157,8 +169,7 @@
 </template>
 
 <script>
-import request from "../../network/request"
-import qs from "qs";
+import {addMenu, deleteMenu, getMunus, updateMenu} from "@/api/moudles/sys_menu";
 
 export default {
   name: "Menu",
@@ -174,7 +185,9 @@ export default {
         component: '',
         state: '',
         perms: '',
-        type: ''
+        type: '',
+        routeName: '',
+        icon: ''
       },
       rules: {
         name: [
@@ -226,7 +239,6 @@ export default {
             this.rules.component = []
           }
 
-
           this.rules.perms = [
             {required: true, message: '请选择权限编码', trigger: 'blur'}
           ]
@@ -258,9 +270,11 @@ export default {
       this.rules.perms = []
     },
     getTableData() {
-      this.$axios.get('http://localhost:8081/sysMenu/list').then(Response => {
+      getMunus().then(Response => {
         console.log(Response.data);
         this.tableData = Response.data.data
+      }, error => {
+        this.$message.error(error)
       })
     },
     //菜单编辑处理，只是显示编辑表单并实现数据回显，后调用
@@ -299,14 +313,7 @@ export default {
     editMenu() {
       delete this.editForm.children
 
-      request({
-        methods: 'get',
-        url: 'http://localhost:8081/sysMenu/updateMenu',
-        params: this.editForm,
-        paramsSerializer: params => {
-          return qs.stringify(params, {indices: false})
-        }
-      }).then(resp => {
+      updateMenu(this.editForm).then(resp => {
         this.$message.success(resp.data.message)
         this.getTableData()
         this.dialogVisible = false
@@ -317,11 +324,7 @@ export default {
     },
     //实现新增菜单
     addMenu() {
-      request({
-        methods: 'get',
-        url: 'http://localhost:8081/sysMenu/addMenu',
-        params: this.editForm
-      }).then(resp => {
+      addMenu(this.editForm).then(resp => {
         this.$message.success(resp.data.message)
         this.getTableData()
         this.dialogVisible = false
@@ -331,13 +334,8 @@ export default {
     },
     //删除菜单
     deleteMenu(id) {
-      request({
-        methods: 'get',
-        url: 'http://localhost:8081/sysMenu/deleteMenu',
-        params: {
-          id
-        }
-      }).then(resp => {
+      let params = {id}
+      deleteMenu(params).then(resp => {
         this.$message.success(resp.data.message)
         this.getTableData()
       }, error => {
@@ -348,7 +346,6 @@ export default {
   created() {
     this.getTableData()
   }
-
 }
 </script>
 

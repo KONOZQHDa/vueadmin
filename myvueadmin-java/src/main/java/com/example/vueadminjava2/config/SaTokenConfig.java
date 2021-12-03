@@ -25,22 +25,21 @@ public class SaTokenConfig implements WebMvcConfigurer{
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SaAnnotationInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new SaAnnotationInterceptor()).addPathPatterns("/**").excludePathPatterns("/static/**");
 //        为方便接口测试，暂时关闭，等最后都完成了再开启路由鉴权
 //        registry.addInterceptor(new SaRouteInterceptor()).addPathPatterns("/**").excludePathPatterns("/captcha","/login");
     }
 
-//     注册 [Sa-Token全局过滤器]，如果未登录返回401，前端根据401code跳转到登录页面
+    //     注册 [Sa-Token全局过滤器]，如果未登录返回401，前端根据401code跳转到登录页面
     @Bean
     public SaServletFilter getSaServletFilter() {
         return new SaServletFilter()
                 .addInclude("/*")
-                .addExclude("/login", "/captcha")
+                .addExclude("/login", "/sysLogin", "/captcha", "/sysUser/getAvatar", "/user/getAvatar", "/user/register")
                 .setAuth(r -> {
                     //axios对复杂跨域请求有一个预检请求，请求方法为options，且不会携带token，下面判断要对options方法放行
-                    if(!request.getMethod().equalsIgnoreCase("options") && StpUtil.isLogin() == false) {
+                    if (!request.getMethod().equalsIgnoreCase("options") && StpUtil.isLogin() == false) {
                         // 与前端约定好，code=401时代表会话未登录
-                        System.out.println("not login");
                         SaRouter.back(SaResult.ok().setCode(401));
                     }
                 });

@@ -19,13 +19,15 @@ public interface SysUserService{
      * @return 实例对象
      */
     SysUser queryById(Long id);
+
     /**
      * 通过username查询单条数据
      *
      * @param username
      * @return 实例对象
      */
-     SysUser queryByUserNameAndPassword(String username,String password);
+    SysUser queryByUserNameAndPassword(String username, String password);
+
     /**
      * 查询多条数据
      *
@@ -58,6 +60,7 @@ public interface SysUserService{
      * @return 是否成功
      */
     boolean deleteById(Long id);
+
     /**
      * 通过主键获取用户所拥有权限
      *
@@ -67,13 +70,15 @@ public interface SysUserService{
     List<String> getAuthoritiesById(Object id);
 
     /*
-    * 查询所有用户
-    *
-    * */
+     * 查询所有用户
+     *
+     * */
     List<SysUser> queryAllUsers();
 
     Integer getTotalCount();
 
     List<SysUser> searchUsers(String userName);
+
+    SysUser getUserByUserName(String userName);
 
 }

@@ -5,14 +5,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -33,6 +32,8 @@ public class SysMenu implements Serializable{
     private Long parentId;
 
     private String name;
+
+    private String routeName;
     /**
      * 菜单URL
      */
@@ -51,10 +52,8 @@ public class SysMenu implements Serializable{
      * 菜单图标
      */
     private String icon;
-    /**
-     * 排序
-     */
-    private Integer ordernum;
+
+    private Integer state;
 
     @TableField(fill = FieldFill.INSERT)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -66,7 +65,6 @@ public class SysMenu implements Serializable{
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date updated;
 
-    private Integer state;
 
     @TableField(exist = false)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
