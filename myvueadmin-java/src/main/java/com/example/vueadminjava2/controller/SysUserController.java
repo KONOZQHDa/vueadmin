@@ -2,7 +2,6 @@ package com.example.vueadminjava2.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.vueadminjava2.commen.result.Result;
 import com.example.vueadminjava2.commen.result.UsersResultData;
 import com.example.vueadminjava2.dao.SysUserDao;
@@ -183,19 +182,4 @@ public class SysUserController{
         return Result.success(null);
     }
 
-
-    /**
-     * 修改密码前需要输入当前密码，验证当前密码是否正确
-     */
-    @GetMapping("validatePassword")
-    public Result validatePassword(@RequestBody String password) {
-        QueryWrapper<SysUser> userQueryWrapper = new QueryWrapper<>();
-        Long loginId = StpUtil.getLoginIdAsLong();
-        userQueryWrapper.eq("id", loginId);
-        SysUser loginUser = sysUserDao.selectOne(userQueryWrapper);
-        if (Md5Util.getMd5PasswordWithSalt(password, loginUser.getSalt()).equals(loginUser.getPassword())) {
-            return Result.success(true);
-        }
-        return Result.success(false);
-    }
 }

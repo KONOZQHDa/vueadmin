@@ -173,8 +173,8 @@ import {
   getRoles,
   searchRole,
   updateRole
-} from "@/api/moudles/sys_role";
-import {getMunus} from "@/api/moudles/sys_menu";
+} from "@/api/moudles/system/sys_role";
+import {getMunus} from "@/api/moudles/system/sys_menu";
 
 export default {
   name: "Role",
@@ -372,7 +372,7 @@ export default {
         this.$message.success(resp.data.message)
         this.getRolePermissions(this.selectedRoleId)
         this.$refs.tree.setCheckedKeys([])
-        
+
       }, error => {
         this.$message.error(error)
       })

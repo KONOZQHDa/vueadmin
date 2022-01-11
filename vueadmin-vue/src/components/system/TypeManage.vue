@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import {addType, deleteType, getType, updateType} from "@/api/moudles/type";
+import {addType, deleteType, getType, updateType} from "@/api/moudles/system/type";
 
 export default {
   name: "TypeManage",

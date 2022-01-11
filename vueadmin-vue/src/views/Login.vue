@@ -177,4 +177,5 @@ export default {
 .label_item .el-form-item__label {
   color: white;
 }
+
 </style>

@@ -40,7 +40,9 @@
 <script>
 import SideMenu from "../components/SideMenu"
 import Tag from "../components/Tag"
-import request from '../network/request'
+import {getUserInfo} from "@/api/moudles/bookstore/userCenter";
+import {getSysUserInfo} from "@/api/moudles/system/userCenter";
+import {logout} from "@/api";
 
 export default {
   name: "Home",
@@ -86,10 +88,7 @@ export default {
       this.$refs[formName].resetFields();
     },
     getSysUserInfo() {
-      request({
-        methods: 'get',
-        url: 'http://localhost:8081/sysUser/userInfo',
-      }).then(resp => {
+      getSysUserInfo().then(resp => {
         this.userInfo = resp.data.data
         this.$store.state.menu.authorizations = resp.data.data.authorizations
       }, error => {
@@ -97,10 +96,7 @@ export default {
       })
     },
     getUserInfo() {
-      request({
-        methods: 'get',
-        url: 'http://localhost:8081/user/userInfo',
-      }).then(resp => {
+      getUserInfo().then(resp => {
         this.userInfo = resp.data.data
       }, error => {
         this.$message.error(error)
@@ -114,17 +110,18 @@ export default {
       }
     },
     logOut() {
-      request({
-        methods: 'get',
-        url: 'http://localhost:8081/logout'
-      }).then(resp => {
+      logout().then(resp => {
         this.$store.commit("CLEAR_TOKEN")
         localStorage.clear()
         sessionStorage.clear()
         this.$store.state.menu.editableTabs = []
         this.$store.state.menu.editableTabsValue = ''
         this.$store.state.menu.authorizations = []
-        this.$router.push('/login')
+        if (this.$store.state.isSysUser) {
+          this.$router.push('/syslogin')
+        } else {
+          this.$router.push('/login')
+        }
       }, error => {
         this.$message.error(error)
       })
@@ -151,6 +148,13 @@ export default {
     this.$bus.$on('updateUserInfo', this.getLoginUserInfo)
     this.$bus.$on('logout', this.logOut)
   },
+  beforeUpdate() {
+    //重新获取最新的活动价书籍
+    //放在这里的话，只有Home更新时才会触发，即如我们从首页切换到购物车，或切换到收藏夹这样
+    //但是Home中的组件内部发生变化则不会回调该函数，而是会回调对应组件的beforeUpdate钩子
+    //同时也在首页组件中打开特价书籍抽屉前调用了该action
+    this.$store.dispatch('book/GET_DISCOUNTBOOKS')
+  }
 }
 </script>
 
@@ -205,7 +209,7 @@ body > .el-container {
 
 .header-avatar {
   float: right;
-  width: 200px;
+  width: 280px;
   display: flex;
   justify-content: space-around;
   align-items: center;

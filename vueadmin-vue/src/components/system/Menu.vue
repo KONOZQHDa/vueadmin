@@ -169,7 +169,7 @@
 </template>
 
 <script>
-import {addMenu, deleteMenu, getMunus, updateMenu} from "@/api/moudles/sys_menu";
+import {addMenu, deleteMenu, getMunus, updateMenu} from "@/api/moudles/system/sys_menu";
 
 export default {
   name: "Menu",
@@ -271,7 +271,6 @@ export default {
     },
     getTableData() {
       getMunus().then(Response => {
-        console.log(Response.data);
         this.tableData = Response.data.data
       }, error => {
         this.$message.error(error)

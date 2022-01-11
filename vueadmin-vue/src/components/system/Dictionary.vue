@@ -146,7 +146,7 @@
     <el-dialog
         title="字典信息"
         :visible.sync="dialogVisible3"
-        width="37%">
+        width="30%">
       <!--        顶部操作栏，用行内表单这样就不用自己再调样式和间距了-->
       <el-form :inline="true" class="demo-form-inline">
         <el-form-item>
@@ -207,7 +207,17 @@
 </template>
 
 <script>
-import request from "@/network/request";
+import {
+  addDiction,
+  addDictype,
+  deleteDiction,
+  deleteDictType,
+  getDictypes,
+  searchDiction,
+  searchDictype,
+  updateDiction,
+  updateDictype
+} from "@/api/moudles/system/dic";
 
 export default {
   name: "Dictionary",
@@ -277,13 +287,10 @@ export default {
 
     searchDictype() {
       if (this.searchKey) {
-        request({
-          method: 'get',
-          url: 'http://localhost:8081/dictype/search',
-          params: {
-            word: this.searchKey
-          }
-        }).then(resp => {
+        let params = {
+          word: this.searchKey
+        }
+        searchDictype(params).then(resp => {
           this.tableData = resp.data.data
         }, error => {
           this.$message.error(error)
@@ -291,14 +298,12 @@ export default {
       }
     },
     searchDiction() {
+
       if (this.searchKey) {
-        request({
-          method: 'get',
-          url: 'http://localhost:8081/diction/search',
-          params: {
-            word: this.searchKey
-          }
-        }).then(resp => {
+        let params = {
+          word: this.searchKey
+        }
+        searchDiction(params).then(resp => {
           this.dicTableData = resp.data.data
         }, error => {
           this.$message.error(error)
@@ -319,10 +324,7 @@ export default {
       this.dialogVisible2 = true
     },
     getDictypes() {
-      request({
-        method: 'get',
-        url: 'http://localhost:8081/dictype/listDicType',
-      }).then(resp => {
+      getDictypes().then(resp => {
         this.tableData = resp.data.data
       }, error => {
         this.$message.error(error)
@@ -333,13 +335,8 @@ export default {
     },
     deleteDictype(id) {
       if (id) {
-        request({
-          method: 'delete',
-          url: 'http://localhost:8081/dictype/deleteDicType',
-          params: {
-            id
-          }
-        }).then(resp => {
+        let params = {id}
+        deleteDictType(params).then(resp => {
           this.$message.success(resp.data.message)
           this.getDictypes()
         }, error => {
@@ -348,13 +345,8 @@ export default {
       }
     },
     deleteDic(id) {
-      request({
-        method: 'delete',
-        url: 'http://localhost:8081/diction/deleteDic',
-        params: {
-          id
-        }
-      }).then(resp => {
+      let params = {id}
+      deleteDiction(params).then(resp => {
         this.$message.success(resp.data.message)
         this.$store.dispatch('diction/getDicTypes')
         this.getDictions()
@@ -384,11 +376,7 @@ export default {
           if (formName === 'dictypeEditForm') {
             //表单中id有值则为编辑操作，若id没有值则为添加操作
             if (this.dictypeEditForm.id) {
-              request({
-                method: 'put',
-                url: 'http://localhost:8081/dictype/updateDicType',
-                data: this.dictypeEditForm
-              }).then(resp => {
+              updateDictype(this.dictypeEditForm).then(resp => {
                 this.$message.success(resp.data.message)
                 this.getDictypes()
                 this.dialogVisible = false
@@ -397,11 +385,7 @@ export default {
                 this.$message.error(error)
               })
             } else {
-              request({
-                method: 'post',
-                url: 'http://localhost:8081/dictype/addDicType',
-                data: this.dictypeEditForm
-              }).then(resp => {
+              addDictype(this.dictypeEditForm).then(resp => {
                 this.$message.success(resp.data.message)
                 this.getDictypes()
                 this.resetForm(formName)
@@ -414,11 +398,7 @@ export default {
           } else {
             //表单中id有值则为编辑操作，若id没有值则为添加操作
             if (this.dicEditForm.id) {
-              request({
-                method: 'put',
-                url: 'http://localhost:8081/diction/updateDic',
-                data: this.dicEditForm
-              }).then(resp => {
+              updateDiction(this.dicEditForm).then(resp => {
                 this.$message.success(resp.data.message)
                 this.$store.dispatch('diction/getDicTypes')
                 this.getDictions()
@@ -429,11 +409,7 @@ export default {
                 this.$message.error(error)
               })
             } else {
-              request({
-                method: 'post',
-                url: 'http://localhost:8081/diction/addDic',
-                data: this.dicEditForm
-              }).then(resp => {
+              addDiction(this.dicEditForm).then(resp => {
                 this.$message.success(resp.data.message)
                 this.$store.dispatch('diction/getDicTypes')
                 this.getDictions()

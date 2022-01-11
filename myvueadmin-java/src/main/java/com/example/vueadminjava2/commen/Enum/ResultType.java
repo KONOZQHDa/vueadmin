@@ -1,4 +1,4 @@
-package com.example.vueadminjava2.commen.result;
+package com.example.vueadminjava2.commen.Enum;
 
 /**
  * 请求返回结果类型

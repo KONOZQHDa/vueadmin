@@ -1,5 +1,5 @@
 <template>
-  <div id="loginTopDiv">
+  <div id="sysloginTopDiv">
     <el-row type="flex" class="el-row1" justify="center">
       <el-col :span=5.5>
         <el-card style="padding-right: 35px" id="loginCard">
@@ -163,7 +163,7 @@ export default {
 }
 
 
-#loginTopDiv {
+#sysloginTopDiv {
   background-image: url("../assets/bg2.jpg");
 }
 

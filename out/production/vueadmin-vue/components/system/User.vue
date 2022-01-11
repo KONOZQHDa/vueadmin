@@ -211,8 +211,8 @@ import {
   resetPassword,
   searchUsers,
   updateUser
-} from "@/api/moudles/sys_user";
-import {getRoles} from "@/api/moudles/sys_role";
+} from "@/api/moudles/system/sys_user";
+import {getRoles} from "@/api/moudles/system/sys_role";
 
 export default {
   name: "user",
@@ -415,7 +415,6 @@ export default {
     },
     getUsers() {
       getUsers().then(resp => {
-        console.log(resp.data);
         this.tableData = resp.data.data.users
         this.total = resp.data.data.totalCount
       }, error => {

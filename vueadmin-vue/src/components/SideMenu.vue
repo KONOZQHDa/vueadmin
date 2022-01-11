@@ -5,14 +5,6 @@
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b">
-    <!--    <router-link to="/index">-->
-    <!--      <el-menu-item index="Index" @click="addTab({name:'Index',title:'首页'})">-->
-    <!--        <template slot="title">-->
-    <!--          <i class="el-icon-s-home"></i>-->
-    <!--          <span slot="title">首页</span>-->
-    <!--        </template>-->
-    <!--      </el-menu-item>-->
-    <!--    </router-link>-->
 
     <el-submenu v-for="menu in menuList" :index="menu.name">
       <template slot="title">

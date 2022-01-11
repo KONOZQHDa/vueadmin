@@ -2,11 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from "@/views/Home"
 import Login from "@/views/Login"
-import Index from "../components/Index"
 import request from "../network/request"
 import store from "../store"
 import Register from "@/views/Register"
-import UserCenter from "@/components/system/UserCenter";
+
 
 Vue.use(VueRouter)
 const routes = [
@@ -14,30 +13,7 @@ const routes = [
 		path: '/',
 		name: 'Home',
 		component: Home,
-		children: [
-			// {
-			// 	path: 'index',
-			// 	name: 'Index',
-			// 	component: Index
-			// }
-		]
-	},
-	{
-		path: '/book',
-		name: 'BookHome',
-		component: Home,
-		children: [
-			{
-				path: 'index',
-				name: 'Index',
-				component: Index
-			},
-			{
-				path: 'userCenter',
-				name: 'UserCenter',
-				component: UserCenter,
-			}
-		]
+		children: []
 	},
 	{
 		path: '/login',
@@ -53,6 +29,11 @@ const routes = [
 		path: '/register',
 		name: 'Register',
 		component: Register
+	},
+	{
+		path: '/orderDetails',
+		name: 'OrderDetails',
+		component: () => import('@/views/OrderDetails')
 	}
 ]
 

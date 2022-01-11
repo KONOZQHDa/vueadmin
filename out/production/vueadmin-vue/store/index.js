@@ -2,13 +2,16 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import menu from "./modules/menu";
 import diction from "@/store/modules/diction";
+import favorites from "@/store/modules/favorites";
+import book from "@/store/modules/book";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
 	state: {
 		tokenName: '',
-		tokenValue: ''
+		tokenValue: '',
+		isSysUser: 0
 	},
 	mutations: {
 		SET_TOKEN(state, token) {
@@ -22,11 +25,16 @@ export default new Vuex.Store({
 			state.tokenValue = ''
 			sessionStorage.setItem('tokenName', '')
 			sessionStorage.setItem('tokenValue', '')
+		},
+		SET_ISSYSUSER(state, p) {
+			state.isSysUser = p
 		}
 	},
 	actions: {},
 	modules: {
 		menu,
-		diction
+		diction,
+		favorites,
+		book
 	}
 })

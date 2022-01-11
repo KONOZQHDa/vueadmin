@@ -49,3 +49,10 @@ export function register(data) {
 		data
 	})
 }
+
+export function logout() {
+	return request({
+		methods: 'get',
+		url: 'http://localhost:8081/logout'
+	});
+}

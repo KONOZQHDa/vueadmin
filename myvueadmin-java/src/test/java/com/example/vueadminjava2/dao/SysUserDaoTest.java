@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @Description :
  * @Author :kono淇杭哒、
@@ -23,7 +21,7 @@ class SysUserDaoTest{
 
     @Test
     void queryById() {
-        SysUser sysUser = sysUserDao.queryById(Long.valueOf(6));
+        SysUser sysUser = sysUserDao.queryById(Long.valueOf(1));
         System.out.println(sysUser);
     }
 }

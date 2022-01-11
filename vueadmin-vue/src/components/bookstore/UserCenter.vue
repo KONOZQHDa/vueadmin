@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import request from "@/network/request";
+import {changeAvatar, changePassword, getUserInfo, updateUserInfo, upImg} from "@/api/moudles/bookstore/userCenter";
 
 export default {
   name: "UserCenter",
@@ -114,21 +114,14 @@ export default {
   },
   methods: {
     getUserInfo() {
-      request({
-        method: 'get',
-        url: 'http://localhost:8081/user/userInfo',
-      }).then(resp => {
+      getUserInfo().then(resp => {
         this.editForm = resp.data.data
       }, error => {
         this.$message.error(error)
       })
     },
     updateUser() {
-      request({
-        method: 'put',
-        url: 'http://localhost:8081/user/updateInfo',
-        data: this.editForm
-      }).then(resp => {
+      updateUserInfo(this.editForm).then(resp => {
         this.$message.success(resp.data.message)
         this.getUserInfo()
         this.$bus.$emit('updateUserInfo')
@@ -138,11 +131,7 @@ export default {
       })
     },
     changePassword() {
-      request({
-        method: 'put',
-        url: 'http://localhost:8081/user/changePassword',
-        data: this.changePasswordForm
-      }).then(resp => {
+      changePassword(this.changePasswordForm).then(resp => {
         this.$message.success(resp.data.message)
         this.changePasswordDialogVisible = false
         this.$bus.$emit('logout')
@@ -152,11 +141,7 @@ export default {
       })
     },
     changeAvatar(data) {
-      request({
-        method: 'put',
-        url: 'http://localhost:8081/user/updateInfo',
-        data
-      }).then(resp => {
+      changeAvatar(data).then(resp => {
         this.$message.success(resp.data.message)
         this.fileList = []
         this.getUserInfo()
@@ -195,12 +180,7 @@ export default {
     subPicForm() {
       this.picFormData = new FormData()
       this.$refs.upload.submit()
-      request({
-        method: 'post',
-        url: 'http://localhost:8081/book/upImg',
-        data: this.picFormData,
-        headers: {'Content-Type': 'multipart/form-data'}
-      }).then(resp => {
+      upImg(this.picFormData).then(resp => {
         let data = {avatar: resp.data.data}
         this.changeAvatar(data)
       }, error => {

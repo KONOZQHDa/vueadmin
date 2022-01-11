@@ -1,4 +1,4 @@
-import request from '../../network/request'
+import request from '../../../network/request'
 import qs from "qs"
 
 export function searchUsers(params) {

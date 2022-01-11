@@ -42,7 +42,10 @@ public class Book implements Serializable{
 
     private Integer stock;
 
-    private String creater;
+    private Long creater;
+
+    @TableField(exist = false)
+    private String createrName;
 
     @TableField(exist = false)
     private String sortId;

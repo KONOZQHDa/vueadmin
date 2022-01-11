@@ -13,8 +13,11 @@ Vue.config.productionTip = false
 new Vue({
 	router,
 	store,
-	created() {
+	mounted() {
 		this.$store.dispatch('diction/getDicTypes')
+		this.$store.dispatch('book/GET_BOOKTYPES')
+		this.$store.dispatch('favorites/GET_FAVORITES'),
+				this.$store.dispatch('book/GET_DISCOUNTBOOKS')
 		Vue.prototype.$bus = this
 	},
 	render: h => h(App)

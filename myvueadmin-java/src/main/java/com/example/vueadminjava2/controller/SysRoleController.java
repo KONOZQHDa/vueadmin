@@ -35,7 +35,6 @@ public class SysRoleController{
     @GetMapping("getRoles")
     public Result getUserRoles() {
         List<SysRole> roles = sysRoleService.getRoles();
-//        List<String> roleNames = roles.stream().map(role -> role.getName()).collect(Collectors.toList());
         return Result.success(roles);
     }
 

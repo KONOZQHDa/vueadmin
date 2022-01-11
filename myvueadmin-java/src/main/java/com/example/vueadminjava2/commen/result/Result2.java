@@ -1,6 +1,7 @@
 package com.example.vueadminjava2.commen.result;
 
 
+import com.example.vueadminjava2.commen.Enum.ResultType;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;

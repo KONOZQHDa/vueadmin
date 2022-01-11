@@ -52,6 +52,12 @@
           width="160">
       </el-table-column>
       <el-table-column
+          prop="routeName"
+          label="路由名称"
+          align="center"
+          width="160">
+      </el-table-column>
+      <el-table-column
           prop="state"
           width="90px"
           align="center"
@@ -130,7 +136,7 @@
         <el-form-item label="路由名称" prop="routeName">
           <el-input v-model="editForm.routeName"></el-input>
         </el-form-item>
-        <el-form-item label="菜单图表" prop="icon">
+        <el-form-item label="菜单图标" prop="icon">
           <el-input v-model="editForm.icon"></el-input>
         </el-form-item>
         <el-form-item label="菜单组件" prop="component">
@@ -163,7 +169,7 @@
 </template>
 
 <script>
-import {addMenu, deleteMenu, getMunus, updateMenu} from "@/api/moudles/sys_menu";
+import {addMenu, deleteMenu, getMunus, updateMenu} from "@/api/moudles/system/sys_menu";
 
 export default {
   name: "Menu",
@@ -265,7 +271,6 @@ export default {
     },
     getTableData() {
       getMunus().then(Response => {
-        console.log(Response.data);
         this.tableData = Response.data.data
       }, error => {
         this.$message.error(error)

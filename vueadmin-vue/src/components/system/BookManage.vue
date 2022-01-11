@@ -85,6 +85,12 @@
           label="折扣价">
       </el-table-column>
       <el-table-column
+          prop="stock"
+          align="center"
+          width="90px"
+          label="库存">
+      </el-table-column>
+      <el-table-column
           prop="sort"
           align="center"
           width="180px"
@@ -94,7 +100,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          prop="creater"
+          prop="createrName"
           align="center"
           width="110px"
           label="创建者">
@@ -166,10 +172,10 @@
 
     <!--    新增书籍或编辑按钮对话框-->
     <el-dialog
-        title="书籍信息"
+        title="新增书籍"
         :visible.sync="dialogVisible"
         @close="resetForm('editForm')"
-        width="37%">
+        width="30%">
       <el-form :model="editForm" :rules="rules" ref="editForm" label-width="100px" class="demo-editForm">
 
         <el-form-item label="书名" prop="name">
@@ -177,6 +183,9 @@
         </el-form-item>
         <el-form-item label="价格" prop="price">
           <el-input v-model="editForm.price"></el-input>
+        </el-form-item>
+        <el-form-item label="库存" prop="stock">
+          <el-input v-model="editForm.stock"></el-input>
         </el-form-item>
         <el-form-item label="类别" prop="sortId">
           <el-select v-model="editForm.sortId" placeholder="请选择类别...">
@@ -205,12 +214,14 @@
               end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="特价" prop="discountPrice">
+          <el-input v-model="editForm.discountPrice"></el-input>
+        </el-form-item>
         <el-form-item label="图片" v-if="!editForm.id">
           <el-upload
               ref="upload"
               class="upload-demo"
               name="imgs"
-              :headers="upHeaders"
               :auto-upload="false"
               action=""
               :http-request="upFile"
@@ -269,8 +280,7 @@
 </template>
 
 <script>
-import request from "@/network/request";
-import qs from "qs";
+import {addBook, deleteBooks, getBook, getSorts, updateBook, upImg} from "@/api/moudles/system/book";
 
 export default {
   name: "BookManage",
@@ -300,6 +310,8 @@ export default {
         id: '',
         name: '',
         price: '',
+        discountPrice: '',
+        stock: '',
         sortId: '',
         imageUrl: '',
         specialStartDateTime: '',
@@ -312,6 +324,9 @@ export default {
         ],
         price: [
           {required: true, message: '请输入书籍价格', trigger: 'blur'},
+        ],
+        stock: [
+          {required: true, message: '请输入书籍库存', trigger: 'blur'},
         ],
         sortId: [
           {required: true, message: '请选择书籍类别', trigger: 'blur'},
@@ -357,23 +372,11 @@ export default {
     deleteButtonDisabled() {
       return this.multipleSelection.length == 0 ? true : false
     },
-    //设置上传封面时的请求头
-    upHeaders() {
-      let upHeaders = {}
-      let tokenName = sessionStorage.getItem('tokenName')
-      let tokenValue = sessionStorage.getItem('tokenValue')
-      upHeaders[tokenName] = tokenValue
-      upHeaders['Content-Type'] = 'multipart/form-data'
-      return upHeaders
-    }
   },
   methods: {
     getSorts() {
-      request({
-        method: 'get',
-        url: 'http://localhost:8081/sort/listSort',
-        params: {usful: 1}
-      }).then(resp => {
+      let params = {usful: 1}
+      getSorts(params).then(resp => {
         this.sorts = resp.data.data
         this.transSortToCascader()
       }, error => {
@@ -421,16 +424,8 @@ export default {
       this.multipleSelection.forEach(item => {
         ids.unshift(item.id)
       })
-      request({
-        method: 'delete',
-        url: 'http://localhost:8081/book/deleteBooks',
-        params: {
-          ids: ids
-        },
-        paramsSerializer: params => {
-          return qs.stringify(params, {indices: false})
-        }
-      }).then(resp => {
+      let params = {ids: ids}
+      deleteBooks(params).then(resp => {
         this.$message.success(resp.data.message)
         this.getBooks()
       }, error => {
@@ -449,14 +444,7 @@ export default {
       this.dialogVisible = true
     },
     getBooks() {
-      request({
-        method: 'get',
-        url: 'http://localhost:8081/book/bookList',
-        params: this.searchParams,
-        paramsSerializer: params => {
-          return qs.stringify(params, {indices: false})
-        }
-      }).then(resp => {
+      getBook(this.searchParams).then(resp => {
         this.tableData = resp.data.data.records
         this.total = resp.data.data.total
       }, error => {
@@ -470,11 +458,7 @@ export default {
     },
     addBook() {
       this.formatSpecialDataTime()
-      request({
-        method: 'post',
-        url: 'http://localhost:8081/book/addBook',
-        data: this.editForm,
-      }).then(resp => {
+      addBook(this.editForm).then(resp => {
         this.$message.success(resp.data.message)
         this.getBooks()
         this.dialogVisible = false
@@ -486,11 +470,7 @@ export default {
       })
     },
     updateBook() {
-      request({
-        method: 'put',
-        url: 'http://localhost:8081/book/updateBook',
-        data: this.editForm
-      }).then(resp => {
+      updateBook(this.editForm).then(resp => {
         this.$message.success(resp.data.message)
         this.getBooks()
         this.resetForm(this.formNameToReset)
@@ -513,12 +493,7 @@ export default {
     subPicForm() {
       this.picFormData = new FormData()
       this.$refs.upload.submit()
-      request({
-        method: 'post',
-        url: 'http://localhost:8081/book/upImg',
-        data: this.picFormData,
-        headers: {'Content-Type': 'multipart/form-data'}
-      }).then(resp => {
+      upImg(this.picFormData).then(resp => {
         //成功上次图片后保存返回的图片资源路径
         this.editForm.imageUrl = resp.data.data;
         if (this.editForm.id) {
@@ -592,7 +567,7 @@ export default {
     },
 
   },
-  created() {
+  mounted() {
     this.getBooks();
     this.getSorts()
   }

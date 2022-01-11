@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import menu from "./modules/menu";
 import diction from "@/store/modules/diction";
+import favorites from "@/store/modules/favorites";
+import book from "@/store/modules/book";
 
 Vue.use(Vuex)
 
@@ -31,6 +33,8 @@ export default new Vuex.Store({
 	actions: {},
 	modules: {
 		menu,
-		diction
+		diction,
+		favorites,
+		book
 	}
 })
